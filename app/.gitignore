@@ -1,1 +1,4 @@
 /build
+
+#secret xml file, look into the secret_template.xml for the template
+src/main/res/values/secrets.xml
