@@ -3,4 +3,8 @@
     <string name="title_home">Home</string>
     <string name="title_map">Map</string>
     <string name="title_profile">Profile</string>
+    <string name="menu_7days">7 Days</string>
+    <string name="menu_14days">2 Weeks</string>
+    <string name="menu_30days">1 Month</string>
+    <string name="menu_90days">3 Months</string>
 </resources>

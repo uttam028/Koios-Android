@@ -5,5 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     class="com.google.android.gms.maps.SupportMapFragment"
+    map:uiCompass="true"
+    map:mapType="normal"
+    map:uiRotateGestures="false"
+    map:uiTiltGestures="false"
+    map:uiScrollGestures="true"
     map:uiZoomControls="true"
-    map:uiZoomGestures="true" />
+    map:uiZoomGestures="true"
+    />

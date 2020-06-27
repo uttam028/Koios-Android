@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.map.VisitActivity">
+
+</androidx.constraintlayout.widget.ConstraintLayout-->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.map.VisitActivity"
+    android:background="#fff"
+    android:orientation="vertical">
+
+    <org.mlab.research.koios.ui.weekviewlib.WeekView
+        android:id="@+id/weekView"
+        android:layout_width="match_parent"
+        android:layout_height="360dp"
+        app:eventTextColor="@android:color/white"
+        app:eventTextSize="0sp"
+        app:textSize="12sp"
+        app:hourHeight="12dp"
+        app:headerColumnPadding="8dp"
+        app:headerColumnTextColor="@color/colorNdBlue"
+        app:headerRowPadding="24dp"
+        app:columnGap="36dp"
+        app:noOfVisibleDays="7"
+        app:headerRowBackgroundColor="@color/toolbar"
+        app:dayBackgroundColor="#05000000"
+        app:todayBackgroundColor="#1848adff"
+        app:headerColumnBackground="#ffffffff"
+        app:todayHeaderTextColor="@color/colorNdGold"
+        app:eventCornerRadius="5dp"
+        app:dayNameLength="length_short"
+        app:xScrollingSpeed="0.75"
+        />
+
+    <View android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#efefef" />
+
+    <TextView
+        android:id="@+id/tvPlaceName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="20dp"
+        android:gravity="center_horizontal"
+        android:text="Name"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="@color/colorNdBlue"/>
+
+
+</LinearLayout>
