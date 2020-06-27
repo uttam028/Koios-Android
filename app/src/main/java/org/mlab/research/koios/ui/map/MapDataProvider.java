@@ -6,11 +6,11 @@ import java.util.Calendar;
 
 public class MapDataProvider {
 
-    private static ArrayList<SignificantLocation> visitedPlaces = new ArrayList<>();
-    private static ArrayList<VisitEvent> visitHistory = new ArrayList<>();
+    private static ArrayList<SignificantLocation> visitedPlaces;
+    private static ArrayList<VisitEvent> visitHistory;
 
     public static ArrayList<SignificantLocation> getSignificantLocations(int numOfDays){
-
+        visitedPlaces = new ArrayList<>();
         visitedPlaces.add(new SignificantLocation("1", "La Fortune", 41.702256, -86.237645));
         visitedPlaces.add(new SignificantLocation("2", "Debartolo", 41.6984196, -86.2362891));
         visitedPlaces.add(new SignificantLocation("3", "Jordan Hall of Science", 41.700782, -86.231959));
@@ -26,6 +26,7 @@ public class MapDataProvider {
     }
 
     public static ArrayList<VisitEvent> getAllVisits(SignificantLocation location){
+        visitHistory = new ArrayList<>();
         Calendar calendar1 = Calendar.getInstance();
         Calendar calendar2 = Calendar.getInstance();
         calendar1.set(2020, 5, 25, 7, 34);
