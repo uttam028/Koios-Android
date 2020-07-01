@@ -1,0 +1,30 @@
+<configuration>
+
+    <property name="LOG_DIR" value="/data/data/org.mlab.research.koios/files" />
+
+    <appender name="SYSTEMFILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>DEBUG</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <file>${LOG_DIR}/app/system.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>${LOG_DIR}/Koios/${log.name}_%d{yyyyMMdd}.csv</fileNamePattern>
+            <!-- keep 5 days' worth of history capped at 1GB total size -->
+            <maxHistory>5</maxHistory>
+            <totalSizeCap>1GB</totalSizeCap>
+
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss SSSS Z},%msg%n</pattern>
+        </encoder>
+
+    </appender>
+
+    <root level="DEBUG">
+        <!--appender-ref ref="FILE" /-->
+        <appender-ref ref="SYSTEMFILE" />
+    </root>
+</configuration>

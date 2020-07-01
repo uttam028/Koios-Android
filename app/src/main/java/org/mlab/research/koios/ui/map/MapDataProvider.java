@@ -1,31 +1,30 @@
 package org.mlab.research.koios.ui.map;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 
 public class MapDataProvider {
 
-    private static ArrayList<SignificantLocation> visitedPlaces;
+    private static ArrayList<StayPoint> visitedPlaces;
     private static ArrayList<VisitEvent> visitHistory;
 
-    public static ArrayList<SignificantLocation> getSignificantLocations(int numOfDays){
+    public static ArrayList<StayPoint> getSignificantLocations(int numOfDays){
         visitedPlaces = new ArrayList<>();
-        visitedPlaces.add(new SignificantLocation("1", "La Fortune", 41.702256, -86.237645));
-        visitedPlaces.add(new SignificantLocation("2", "Debartolo", 41.6984196, -86.2362891));
-        visitedPlaces.add(new SignificantLocation("3", "Jordan Hall of Science", 41.700782, -86.231959));
-        visitedPlaces.add(new SignificantLocation("4", "South Dining Hall",41.699584, -86.241428));
-        visitedPlaces.add(new SignificantLocation("5", "North Dining Hall",41.704641, -86.235425));
-        visitedPlaces.add(new SignificantLocation("6", "Hesburgh Library",41.702462, -86.234868));
+        visitedPlaces.add(new StayPoint("1", "La Fortune", 41.702256, -86.237645));
+        visitedPlaces.add(new StayPoint("2", "Debartolo", 41.6984196, -86.2362891));
+        visitedPlaces.add(new StayPoint("3", "Jordan Hall of Science", 41.700782, -86.231959));
+        visitedPlaces.add(new StayPoint("4", "South Dining Hall",41.699584, -86.241428));
+        visitedPlaces.add(new StayPoint("5", "North Dining Hall",41.704641, -86.235425));
+        visitedPlaces.add(new StayPoint("6", "Hesburgh Library",41.702462, -86.234868));
 
         return visitedPlaces;
     }
 
-    public static ArrayList<VisitEvent> getVisitHistory(SignificantLocation location, int numOfDays){
+    public static ArrayList<VisitEvent> getVisitHistory(StayPoint location, int numOfDays){
         return null;
     }
 
-    public static ArrayList<VisitEvent> getAllVisits(SignificantLocation location){
+    public static ArrayList<VisitEvent> getAllVisits(StayPoint location){
         visitHistory = new ArrayList<>();
         Calendar calendar1 = Calendar.getInstance();
         Calendar calendar2 = Calendar.getInstance();

@@ -7,9 +7,7 @@ import android.graphics.RectF;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import org.joda.time.DateTime;
 import org.mlab.research.koios.R;
 import org.mlab.research.koios.ui.weekviewlib.DateTimeInterpreter;
 import org.mlab.research.koios.ui.weekviewlib.MonthLoader;
@@ -19,7 +17,6 @@ import org.mlab.research.koios.ui.weekviewlib.WeekViewEvent;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -27,7 +24,7 @@ public class VisitActivity extends AppCompatActivity implements WeekView.EventCl
 
     private WeekView weekView;
     private TextView tvPlaceName;
-    private SignificantLocation significantLocation;
+    private StayPoint stayPoint;
     private ArrayList<VisitEvent> visitEvents;
 
     @Override
@@ -40,10 +37,10 @@ public class VisitActivity extends AppCompatActivity implements WeekView.EventCl
         actionBar.setTitle("Details");
 
 
-        significantLocation = getIntent().getParcelableExtra(MapFragment.SIG_LOC_PARCEL);
+        stayPoint = getIntent().getParcelableExtra(MapFragment.SIG_LOC_PARCEL);
 
         tvPlaceName = findViewById(R.id.tvPlaceName);
-        tvPlaceName.setText(significantLocation.getName());
+        tvPlaceName.setText(stayPoint.getName());
 
         weekView = (WeekView) findViewById(R.id.weekView);
         weekView.setMonthChangeListener(this);
@@ -51,7 +48,7 @@ public class VisitActivity extends AppCompatActivity implements WeekView.EventCl
         weekView.setNumberOfVisibleDays(7);
         setupDateTimeInterpreter(false);
 
-        visitEvents = MapDataProvider.getAllVisits(significantLocation);
+        visitEvents = MapDataProvider.getAllVisits(stayPoint);
         Log.d("jodatime", visitEvents.size()+ ", number of events");
     }
 

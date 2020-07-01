@@ -7,6 +7,11 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 
+import org.mlab.research.koios.context.source.WiFiEventGenerator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.helpers.Util;
+
 public class Koios extends Application implements Application.ActivityLifecycleCallbacks {
 
     private static final String TAG = Koios.class.getSimpleName() + "_debug";
@@ -14,12 +19,18 @@ public class Koios extends Application implements Application.ActivityLifecycleC
     private static Context context;
     private int activityReferences = 0;
     private boolean isActivityChangingConfigurations = false;
+    private static Logger systemLogger;
 
     @Override
     public void onCreate() {
         super.onCreate();
         registerActivityLifecycleCallbacks(this);
         context = getApplicationContext();
+
+        initializeLogger();
+
+        //start generating wifi events
+        new WiFiEventGenerator().start();
     }
 
     @Override
@@ -75,6 +86,20 @@ public class Koios extends Application implements Application.ActivityLifecycleC
 
     public static Context getContext() {
         return context;
+    }
+
+
+    public static void initializeLogger(){
+        if (systemLogger == null){
+            systemLogger = LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
+        }
+    }
+
+    public static void log(String msg){
+        if (systemLogger != null){
+//            Log.d(TAG, "system logger event "+ systemLogger.getName() + "," + systemLogger.isDebugEnabled());
+            systemLogger.debug(msg);
+        }
     }
 
 

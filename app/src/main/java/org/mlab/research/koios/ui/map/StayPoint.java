@@ -3,13 +3,13 @@ package org.mlab.research.koios.ui.map;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class SignificantLocation implements Parcelable {
+public class StayPoint implements Parcelable {
     private String id;
     private String Name;
     private double latitude;
     private double longitude;
 
-    public SignificantLocation(String id, String name, double latitude, double longitude) {
+    public StayPoint(String id, String name, double latitude, double longitude) {
         this.id = id;
         Name = name;
         this.latitude = latitude;
@@ -34,7 +34,7 @@ public class SignificantLocation implements Parcelable {
 
 
 
-    protected SignificantLocation(Parcel in) {
+    protected StayPoint(Parcel in) {
         id = in.readString();
         Name = in.readString();
         latitude = in.readDouble();
@@ -55,15 +55,15 @@ public class SignificantLocation implements Parcelable {
     }
 
     @SuppressWarnings("unused")
-    public static final Parcelable.Creator<SignificantLocation> CREATOR = new Parcelable.Creator<SignificantLocation>() {
+    public static final Parcelable.Creator<StayPoint> CREATOR = new Parcelable.Creator<StayPoint>() {
         @Override
-        public SignificantLocation createFromParcel(Parcel in) {
-            return new SignificantLocation(in);
+        public StayPoint createFromParcel(Parcel in) {
+            return new StayPoint(in);
         }
 
         @Override
-        public SignificantLocation[] newArray(int size) {
-            return new SignificantLocation[size];
+        public StayPoint[] newArray(int size) {
+            return new StayPoint[size];
         }
     };
 }

@@ -37,7 +37,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     public static final String SIG_LOC_PARCEL = "sig_loc_parcel";
 
-    private ArrayList<SignificantLocation> significantLocations;
+    private ArrayList<StayPoint> stayPoints;
     SupportMapFragment mapFragment;
     private GoogleMap googleMap;
 
@@ -87,12 +87,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         googleMap.getUiSettings().setMapToolbarEnabled(false);
 
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
-        for (int i=0;i<significantLocations.size();i++){
-            LatLng tempLatLng = new LatLng(significantLocations.get(i).getLatitude(), significantLocations.get(i).getLongitude());
+        for (int i = 0; i< stayPoints.size(); i++){
+            LatLng tempLatLng = new LatLng(stayPoints.get(i).getLatitude(), stayPoints.get(i).getLongitude());
             Marker marker = googleMap.addMarker(new MarkerOptions()
                 .icon(BitmapDescriptorFactory.defaultMarker(DEFAULT_MARKER_COLOR))
                 .anchor(0.5f, 0.5f)
-                .title(significantLocations.get(i).getName())
+                .title(stayPoints.get(i).getName())
                 .position(tempLatLng));
             marker.showInfoWindow();
             marker.setTag(i);
@@ -104,7 +104,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             public void onInfoWindowClick(Marker marker) {
                 int tag = (int) marker.getTag();
                 Intent intent = new Intent(getActivity(), VisitActivity.class);
-                intent.putExtra(SIG_LOC_PARCEL, significantLocations.get(tag));
+                intent.putExtra(SIG_LOC_PARCEL, stayPoints.get(tag));
                 startActivity(intent);
             }
         });
@@ -116,7 +116,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
 
     private void refreshMapView(int numOfDays){
-        significantLocations = MapDataProvider.getSignificantLocations(numOfDays);
+        stayPoints = MapDataProvider.getSignificantLocations(numOfDays);
         mapFragment.getMapAsync(this);
     }
 }

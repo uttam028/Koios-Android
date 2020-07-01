@@ -1,19 +1,17 @@
 package org.mlab.research.koios.ui.map;
 
-import android.os.Parcelable;
-
 public class Visit {
 
-    private SignificantLocation significantLocation;
+    private StayPoint stayPoint;
     private VisitEvent event;
 
-    public Visit(SignificantLocation significantLocation, VisitEvent event) {
-        this.significantLocation = significantLocation;
+    public Visit(StayPoint stayPoint, VisitEvent event) {
+        this.stayPoint = stayPoint;
         this.event = event;
     }
 
-    public SignificantLocation getSignificantLocation() {
-        return significantLocation;
+    public StayPoint getStayPoint() {
+        return stayPoint;
     }
 
     public VisitEvent getEvent() {
