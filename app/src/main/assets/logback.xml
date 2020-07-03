@@ -11,9 +11,9 @@
         <file>${LOG_DIR}/app/system.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- daily rollover -->
-            <fileNamePattern>${LOG_DIR}/Koios/${log.name}_%d{yyyyMMdd}.csv</fileNamePattern>
+            <fileNamePattern>${LOG_DIR}/app/%d{yyyyMMdd}.csv</fileNamePattern>
             <!-- keep 5 days' worth of history capped at 1GB total size -->
-            <maxHistory>5</maxHistory>
+            <maxHistory>3</maxHistory>
             <totalSizeCap>1GB</totalSizeCap>
 
         </rollingPolicy>

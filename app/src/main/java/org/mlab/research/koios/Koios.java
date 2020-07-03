@@ -2,12 +2,16 @@ package org.mlab.research.koios;
 
 import android.app.Activity;
 import android.app.Application;
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
+import android.content.ComponentName;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 
 import org.mlab.research.koios.context.source.WiFiEventGenerator;
+import org.mlab.research.koios.ui.map.VisitProcessingJobService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.helpers.Util;
@@ -29,8 +33,11 @@ public class Koios extends Application implements Application.ActivityLifecycleC
 
         initializeLogger();
 
+        scheduleVisitProcessing();
+
         //start generating wifi events
-        new WiFiEventGenerator().start();
+//        new WiFiEventGenerator().start();
+
     }
 
     @Override
@@ -100,6 +107,23 @@ public class Koios extends Application implements Application.ActivityLifecycleC
 //            Log.d(TAG, "system logger event "+ systemLogger.getName() + "," + systemLogger.isDebugEnabled());
             systemLogger.debug(msg);
         }
+    }
+
+    private void scheduleVisitProcessing(){
+        ComponentName componentName = new ComponentName(this, VisitProcessingJobService.class);
+        JobInfo jobInfo = new JobInfo.Builder(31, componentName)
+                .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
+                .setPeriodic(2 * 60 * 60 * 1000)//1 hour in milliseconds
+                .build();
+
+        JobScheduler jobScheduler = (JobScheduler)getSystemService(JOB_SCHEDULER_SERVICE);
+        int resultCode = jobScheduler.schedule(jobInfo);
+        if (resultCode == JobScheduler.RESULT_SUCCESS) {
+            Log.d(TAG, "Visit processing Job scheduled!");
+        } else {
+            Log.d(TAG, "visit processing Job not scheduled");
+        }
+
     }
 
 
