@@ -12,33 +12,54 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.map.VisitActivity"></activity>
-
+        <activity android:name=".ui.formmaster.viewholder.FormAudioRecorderActivity"></activity>
+        <activity android:name=".ui.survey.SurveyDetailsActivity" />
         <activity
-            android:name=".MainActivity"
-            android:label="@string/app_name">
+            android:name=".FlowControlActivity"
+            android:theme="@android:style/Theme.NoDisplay">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <service android:name=".ui.map.LocationDataCollectionService" android:exported="false"/>
-        <service android:name=".ui.map.VisitProcessingJobService" android:permission="android.permission.BIND_JOB_SERVICE" />
+        <activity
+            android:name=".SignupActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".VerifyToken"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" />
+        <activity android:name=".ui.map.VisitActivity" />
 
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/maps_api_key" />
+
+        <service
+            android:name=".ui.map.VisitProcessingJobService"
+            android:permission="android.permission.BIND_JOB_SERVICE" /> <!-- >Services required for Koios framework< -->
+        <service
+            android:name=".framework.engine.RuleManagementService"
+            android:exported="false" />
+        <service
+            android:name=".framework.sensor.CoreSensorListener"
+            android:exported="false" />
+        <service
+            android:name=".ui.map.LocationDataCollectionService"
+            android:exported="false" />
     </application>
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
 </manifest>

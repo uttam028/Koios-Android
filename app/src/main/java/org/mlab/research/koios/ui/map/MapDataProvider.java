@@ -2,6 +2,7 @@ package org.mlab.research.koios.ui.map;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 public class MapDataProvider {
 
@@ -28,6 +29,8 @@ public class MapDataProvider {
         visitHistory = new ArrayList<>();
         Calendar calendar1 = Calendar.getInstance();
         Calendar calendar2 = Calendar.getInstance();
+        Date date = new Date();
+        calendar1.setTimeInMillis(date.getTime());
         calendar1.set(2020, 5, 25, 7, 34);
         calendar2.set(2020, 5, 25, 11, 23);
         visitHistory.add(new VisitEvent(calendar1, calendar2));

@@ -10,12 +10,16 @@
         android:name="org.mlab.research.koios.ui.home.HomeFragment"
         android:label="@string/title_home"
         tools:layout="@layout/fragment_home" />
-
     <fragment
+        android:id="@+id/navigation_survey"
+        android:name="org.mlab.research.koios.ui.survey.SurveyFragment"
+        android:label="Survey"
+        tools:layout="@layout/fragment_survey" />
+    <!--fragment
         android:id="@+id/navigation_map"
         android:name="org.mlab.research.koios.ui.map.MapFragment"
         android:label="@string/title_map"
-        tools:layout="@layout/fragment_map" />
+        tools:layout="@layout/fragment_map" /-->
 
     <fragment
         android:id="@+id/navigation_profile"

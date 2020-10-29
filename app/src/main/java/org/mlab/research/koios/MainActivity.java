@@ -4,10 +4,18 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.mlab.research.koios.ui.map.LocationDataCollectionService;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_home, R.id.navigation_map, R.id.navigation_profile)
+                R.id.navigation_home, R.id.navigation_survey, R.id.navigation_profile)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
@@ -45,8 +53,6 @@ public class MainActivity extends AppCompatActivity {
         }else {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 100);
         }
-
-
     }
 
 
@@ -62,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startLocationService(){
-        Intent intent = new Intent(Koios.getContext(), LocationDataCollectionService.class);
-        ContextCompat.startForegroundService(Koios.getContext(), intent);
+//        Intent intent = new Intent(Koios.getContext(), LocationDataCollectionService.class);
+//        ContextCompat.startForegroundService(Koios.getContext(), intent);
     }
 }

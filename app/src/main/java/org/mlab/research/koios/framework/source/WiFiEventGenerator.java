@@ -1,11 +1,10 @@
-package org.mlab.research.koios.context.source;
+package org.mlab.research.koios.framework.source;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.util.Log;
@@ -74,7 +73,7 @@ public class WiFiEventGenerator {
                     }else {
                         message = SOURCE + ",cell,,";
                         Log.d(TAG, message);
-                        Koios.log(message);
+//                        Koios.log(message);
                         broadcast(message);
                         currentWiFi = temp;
                     }
@@ -89,7 +88,7 @@ public class WiFiEventGenerator {
                         currentWiFi = temp;
                         message = SOURCE+ ",wifi,"+ currentWiFi.SSID +"," + currentWiFi.BSSID;
                         if (!currentWiFi.BSSID.startsWith("00:00:00:")){
-                            Koios.log(message);
+//                            Koios.log(message);
                             Log.d(TAG, message);
                             broadcast(message);
                         }

@@ -6,24 +6,31 @@ import android.app.job.JobInfo;
 import android.app.job.JobScheduler;
 import android.content.ComponentName;
 import android.content.Context;
-import android.os.AsyncTask;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
-import org.mlab.research.koios.context.source.WiFiEventGenerator;
+import org.mlab.research.koios.framework.engine.RuleManagementService;
+import org.mlab.research.koios.ui.map.MapDBHelper;
 import org.mlab.research.koios.ui.map.VisitProcessingJobService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.slf4j.helpers.Util;
+
+import androidx.core.content.ContextCompat;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Koios extends Application implements Application.ActivityLifecycleCallbacks {
 
     private static final String TAG = Koios.class.getSimpleName() + "_debug";
 
     private static Context context;
+    private static KoiosDbHelper dbHelper;
     private int activityReferences = 0;
     private boolean isActivityChangingConfigurations = false;
-    private static Logger systemLogger;
+
+    private static CimonService service;
+
+//    private static Logger systemLogger;
+    private static MapDBHelper mapDBHelper;
 
     @Override
     public void onCreate() {
@@ -31,12 +38,25 @@ public class Koios extends Application implements Application.ActivityLifecycleC
         registerActivityLifecycleCallbacks(this);
         context = getApplicationContext();
 
-        initializeLogger();
+//        initializeLogger();
 
-        scheduleVisitProcessing();
+        initializeCimonService();
+        dbHelper = new KoiosDbHelper(context);
+        mapDBHelper = new MapDBHelper(context);
+
+//        scheduleVisitProcessing();
 
         //start generating wifi events
 //        new WiFiEventGenerator().start();
+
+
+//        Intent sensorIntent = new Intent(this, CoreSensorListener.class);
+//        ContextCompat.startForegroundService(this, sensorIntent);
+
+
+//        Intent intent = new Intent(this, RuleManagementService.class);
+//        ContextCompat.startForegroundService(this, intent);
+
 
     }
 
@@ -63,6 +83,7 @@ public class Koios extends Application implements Application.ActivityLifecycleC
         Log.d(TAG, "activity resumed, name:" + activity.getLocalClassName());
         if(activity instanceof MainActivity){
             Log.d(TAG, "I can start syncing study");
+            StudySyncer.getInstance().syncStudies();
         }
     }
 
@@ -96,18 +117,18 @@ public class Koios extends Application implements Application.ActivityLifecycleC
     }
 
 
-    public static void initializeLogger(){
-        if (systemLogger == null){
-            systemLogger = LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
-        }
-    }
-
-    public static void log(String msg){
-        if (systemLogger != null){
-//            Log.d(TAG, "system logger event "+ systemLogger.getName() + "," + systemLogger.isDebugEnabled());
-            systemLogger.debug(msg);
-        }
-    }
+//    public static void initializeLogger(){
+//        if (systemLogger == null){
+//            systemLogger = LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
+//        }
+//    }
+//
+//    public static void log(String msg){
+//        if (systemLogger != null){
+////            Log.d(TAG, "system logger event "+ systemLogger.getName() + "," + systemLogger.isDebugEnabled());
+//            systemLogger.debug(msg);
+//        }
+//    }
 
     private void scheduleVisitProcessing(){
         ComponentName componentName = new ComponentName(this, VisitProcessingJobService.class);
@@ -125,6 +146,25 @@ public class Koios extends Application implements Application.ActivityLifecycleC
         }
 
     }
+    private void initializeCimonService() {
+        // Build the CIMON web service
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(Util.baseUrl())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        service = retrofit.create(CimonService.class);
 
+    }
 
+    public static MapDBHelper getMapDBHelper() {
+        return mapDBHelper;
+    }
+
+    public static CimonService getService() {
+        return service;
+    }
+
+    public static KoiosDbHelper getDbHelper() {
+        return dbHelper;
+    }
 }

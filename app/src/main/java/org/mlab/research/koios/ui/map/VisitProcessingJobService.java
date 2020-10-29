@@ -2,7 +2,16 @@ package org.mlab.research.koios.ui.map;
 
 import android.app.job.JobParameters;
 import android.app.job.JobService;
+import android.location.Address;
+import android.location.Geocoder;
 import android.util.Log;
+
+import org.mlab.research.koios.Koios;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 public class VisitProcessingJobService extends JobService {
 
@@ -35,7 +44,6 @@ public class VisitProcessingJobService extends JobService {
     private void doWork(JobParameters jobParameters) {
 
         //TODO: process new visits
-
 
         isWorking = false;
         boolean needsReschedule = false;

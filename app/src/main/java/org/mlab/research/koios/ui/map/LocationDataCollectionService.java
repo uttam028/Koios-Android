@@ -107,7 +107,7 @@ public class LocationDataCollectionService extends Service {
                     }else {
                         message = SOURCE + ",cell,,";
                         Log.d(TAG, message);
-                        Koios.log(message);
+//                        Koios.log(message);
 //                        broadcast(message);
                         currentWiFi = temp;
 //                        startPeriodicLocationUpdate();
@@ -144,7 +144,7 @@ public class LocationDataCollectionService extends Service {
             task.addOnSuccessListener(new OnSuccessListener<Location>() {
                 @Override
                 public void onSuccess(Location location) {
-                    Koios.log(SOURCE+ ",wifi,"+ currentWiFi.SSID +"," + currentWiFi.BSSID + "," + location.getLatitude()+ "," + location.getLongitude());
+//                    Koios.log(SOURCE+ ",wifi,"+ currentWiFi.SSID +"," + currentWiFi.BSSID + "," + location.getLatitude()+ "," + location.getLongitude());
 
                     //TODO: insert location and wifi information to the location buffer
                     //current wifi information is available on currentWiFi objectr
@@ -200,7 +200,7 @@ public class LocationDataCollectionService extends Service {
                             builder.append("gps").append(",").append(bestLocation.getLatitude()).append(",")
                                     .append(bestLocation.getLongitude()).append(",").append(bestLocation.getAccuracy())
                                     .append(",").append(bestLocation.getAltitude());
-                            Koios.log(builder.toString());
+//                            Koios.log(builder.toString());
 
                             //TODO: insert location and wifi information to the location buffer
                             //current wifi information is available on currentWiFi object

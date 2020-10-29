@@ -6,9 +6,21 @@
     <color name="colorNdBlue">#0d1f36</color>
     <color name="colorNdGold">#e1b42a</color>
     <color name="colorWhite">#ffffff</color>
+    <color name="colorOverdue">#28B30071</color>
+    <color name="colorWarning">#27FFEB3B</color>
+
 
     <!--color for weekview library-->
     <color name="toolbar">#efefef</color>
     <color name="toolbar_text">#8f000000</color>
+
+    <!-- color for formview library-->
+    <color name="colorFormMasterHeaderBackground">#DDDDDD</color>
+    <color name="colorFormMasterHeaderText">#000000</color>
+    <color name="colorFormMasterElementBackground">#FFFFFF</color>
+    <color name="colorFormMasterElementTextTitle">#222222</color>
+    <color name="colorFormMasterElementTextValue">#000000</color>
+    <color name="colorFormMasterDivider">#DDDDDD</color>
+
 
 </resources>

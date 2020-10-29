@@ -7,4 +7,43 @@
     <string name="menu_14days">2 Weeks</string>
     <string name="menu_30days">1 Month</string>
     <string name="menu_90days">3 Months</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="enter_email">Email</string>
+    <string name="bundleSource">bundleSource</string>
+
+    <!-->App state<-->
+    <string name="signedup">signedup</string>
+    <string name="verified">verified</string>
+    <string name="consented">consented</string>
+    <!--string name="profiled">profiled</string-->
+
+
+    <!-->Display Message<-->
+    <string name="instVerificationCodeText">Input 4 Digit Verification Code Sent to </string>
+
+    <!-->Button Text<-->
+    <string name="buttonTextVerify">Verify</string>
+    <string name="buttonTextResend">Resend</string>
+    <string name="tryAnotherEmail">Try Another Email</string>
+
+    <!-->error messages<-->
+    <string name="emptyString"></string>
+    <string name="invalidEmail">Invalid Email</string>
+    <string name="invalidToken">Invalid Token</string>
+    <string name="serviceUnavailable">Service Not Available</string>
+    <string name="serviceError">Please Try Later</string>
+
+    <!-->Strings for shared preferences<-->
+    <string name="sharedPrefFileName">AppSharedPreference</string>
+    <string name="uuid">uuid</string>
+    <string name="userEmail">userEmail</string>
+    <string name="appState">appState</string>
+    <string name="lastBootTime">lastBootTime</string>
+    <string name="lastStepEventTime">lastStepEventTime</string>
+    <string name="lastStepCount">lastStepCount</string>
+    <string name="signupText">Signup</string>
+
+
 </resources>
