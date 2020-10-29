@@ -21,6 +21,14 @@ public interface CimonService {
     Call<CimonResponse> verifyToken(@Query("email") String email, @Query("uuid") String uuid, @Query("token") String token);
 
 
+    //https://koiosplatform.com/cimoninterface/study/list/open/public?email=test@nd.edu
+    @GET("study/list/open/public")
+    Call<ArrayList<KoiosStudy>> getOpenStudies(@Query("email") String email);
+
+    @GET("study/enroll")
+    Call<CimonResponse> enrollToStudy(@Query("id") String studyId, @Query("email") String email, @Query("uuid") String uuid,
+                                      @Query("jointime") String joinTime, @Query("jointimezone") String joinTimeZone);
+
 
     //https://koiosplatform.com/mcsweb/cimoninterface/study/list/enrolled/active?email=uttam028@gmail.com&uuid=732819hjkd
     @GET("study/list/enrolled/active")

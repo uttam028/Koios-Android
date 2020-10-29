@@ -15,6 +15,10 @@
         android:id="@+id/navigation_map"
         android:icon="@drawable/ic_map_black_24dp"
         android:title="@string/title_map" /-->
+    <item
+        android:id="@+id/navigation_study"
+        android:icon="@drawable/study"
+        android:title="@string/title_study" />
 
     <item
         android:id="@+id/navigation_profile"

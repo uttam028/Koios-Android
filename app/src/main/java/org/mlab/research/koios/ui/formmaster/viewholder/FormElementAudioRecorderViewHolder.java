@@ -47,7 +47,7 @@ public class FormElementAudioRecorderViewHolder extends BaseViewHolder {
         mTextViewTitle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(itemView.getContext(), SurveyDetailsActivity.class);
+                Intent intent = new Intent(itemView.getContext(), FormAudioRecorderActivity.class);
                 itemView.getContext().startActivity(intent);
             }
         });

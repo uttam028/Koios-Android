@@ -44,6 +44,7 @@
     <string name="lastStepEventTime">lastStepEventTime</string>
     <string name="lastStepCount">lastStepCount</string>
     <string name="signupText">Signup</string>
+    <string name="title_study">Studies</string>
 
 
 </resources>

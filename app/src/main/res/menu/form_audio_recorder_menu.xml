@@ -4,12 +4,7 @@
     <item android:id="@+id/upload_audio_recording"
         android:title="Upload"
         app:showAsAction="always"
-        android:orderInCategory="102"
-        />
-    <item android:id="@+id/upload_audio_recording2"
-        android:title="Testing"
-        app:showAsAction="never"
-        android:orderInCategory="101"
+        android:orderInCategory="100"
         />
 
 </menu>

@@ -20,50 +20,47 @@ public class FormAudioRecorderActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_form_audio_recorder);
 
-        Log.d(TAG, "loading audio recorder activity...");
-//        invalidateOptionsMenu();
-//        setupToolBar();
+        setupToolBar();
     }
 
-//    private void setupToolBar() {
-//
-//        final ActionBar actionBar = getSupportActionBar();
-//
-//        if (actionBar != null) {
-//            actionBar.setDisplayShowTitleEnabled(true);
-//            actionBar.setDisplayHomeAsUpEnabled(true);
-//            actionBar.setHomeButtonEnabled(true);
-//        }
-//
-//    }
-//
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        MenuInflater inflater = getMenuInflater();
-//        inflater.inflate(R.menu.form_audio_recorder_menu, menu);
-//        return true;
-//    }
+    private void setupToolBar() {
 
-//    @Override
-//    public boolean onPrepareOptionsMenu(Menu menu) {
-//        MenuItem item = menu.findItem(R.id.upload_audio_recording);
-//        return super.onPrepareOptionsMenu(menu);
-//    }
+        final ActionBar actionBar = getSupportActionBar();
 
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        Log.d(TAG, "option menu selected:"+ item.getItemId() + ", " + item.getTitle());
-//        //Toast.makeText(getApplicationContext(),"menu "+ item.getItemId() + "," + mRecyclerView.getChildCount(),Toast.LENGTH_SHORT).show();
-//        switch (item.getItemId()){
-//            case R.id.upload_audio_recording:
-////                startNextActivity();
-////                updateAppState();
-//                return true;
-//            default:
-//                onBackPressed();
-//                return super.onOptionsItemSelected(item);
-//        }
-//
-//    }
+        if (actionBar != null) {
+            actionBar.setDisplayShowTitleEnabled(false);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeButtonEnabled(true);
+        }
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.form_audio_recorder_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem item = menu.findItem(R.id.upload_audio_recording);
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Log.d(TAG, "option menu selected:"+ item.getItemId() + ", " + item.getTitle());
+        //Toast.makeText(getApplicationContext(),"menu "+ item.getItemId() + "," + mRecyclerView.getChildCount(),Toast.LENGTH_SHORT).show();
+        switch (item.getItemId()){
+            case R.id.upload_audio_recording:
+
+                return true;
+            default:
+                onBackPressed();
+                return super.onOptionsItemSelected(item);
+        }
+
+    }
 
 }

@@ -20,7 +20,11 @@
         android:name="org.mlab.research.koios.ui.map.MapFragment"
         android:label="@string/title_map"
         tools:layout="@layout/fragment_map" /-->
-
+    <fragment
+        android:id="@+id/navigation_study"
+        android:name="org.mlab.research.koios.ui.study.StudyManagementFragment"
+        android:label="@string/title_study"
+        tools:layout="@layout/fragment_study_management" />
     <fragment
         android:id="@+id/navigation_profile"
         android:name="org.mlab.research.koios.ui.profile.ProfileFragment"
