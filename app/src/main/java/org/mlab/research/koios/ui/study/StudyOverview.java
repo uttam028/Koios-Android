@@ -2,42 +2,31 @@ package org.mlab.research.koios.ui.study;
 
 public class StudyOverview {
     private int studyId;
-    private int surveyId;
     private String studyName;
-    private String surveyName;
-    private String lastParticipation;
-    private String nextDue;
+    private String univName;
+    private String dateJoined;
 
-    public StudyOverview(int studyId, int surveyId, String studyName, String surveyName, String lastParticipation, String nextDue){
+    public StudyOverview(int studyId, String studyName, String univName, String dateJoined){
         this.studyId = studyId;
-        this.surveyId = surveyId;
         this.studyName = studyName;
-        this.surveyName = surveyName;
-        this.lastParticipation = lastParticipation;
-        this.nextDue = nextDue;
+        this.univName = univName;
+        this.dateJoined = dateJoined;
     }
 
     public int getStudyId() {
         return studyId;
     }
 
-    public int getSurveyId() {
-        return surveyId;
-    }
-
     public String getStudyName() {
         return studyName;
     }
 
-    public String getSurveyName() {
-        return surveyName;
+    public String getUnivName() {
+        return univName;
     }
 
-    public String getLastParticipation() {
-        return lastParticipation;
+    public String getDateJoined() {
+        return dateJoined;
     }
 
-    public String getNextDue() {
-        return nextDue;
-    }
 }

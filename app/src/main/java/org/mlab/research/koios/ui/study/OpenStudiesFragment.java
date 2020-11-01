@@ -7,13 +7,20 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.mlab.research.koios.Koios;
+import org.mlab.research.koios.KoiosStudy;
 import org.mlab.research.koios.R;
+import org.mlab.research.koios.StudySurveyConfig;
 import org.mlab.research.koios.ui.study.StudyOverviewAdapter;
+import org.mlab.research.koios.ui.study.StudyOverview;
+import org.mlab.research.koios.ui.survey.SurveyOverview;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -81,7 +88,7 @@ public class OpenStudiesFragment extends Fragment implements ItemClickListener{
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-
+        loadData();
         recyclerView = (RecyclerView) getActivity().findViewById(R.id.studyRecyclerView);
         adapter = new StudyOverviewAdapter(this, overviewList);
         recyclerView.setAdapter(adapter);
@@ -92,7 +99,18 @@ public class OpenStudiesFragment extends Fragment implements ItemClickListener{
 
     @Override
     public void onItemClick(View view, int position) {
-        return;
+        return ;
     }
 
+    private void loadData(){
+        overviewList = new ArrayList<>();
+        for (KoiosStudy study:Koios.getDbHelper().getAllStudies()){
+            overviewList.add(new StudyOverview(study.getId(), study.getName(), "University of Notre Dame", ""));
+        }
+
+        // remove these
+        overviewList.add(new StudyOverview(2, "Test Study 2", "University of Notre Dame", ""));
+        overviewList.add(new StudyOverview(3, "Test Study 3", "University of Notre Dame", ""));
+        overviewList.add(new StudyOverview(4, "Test Study 4", "University of Notre Dame", ""));
+    }
 }

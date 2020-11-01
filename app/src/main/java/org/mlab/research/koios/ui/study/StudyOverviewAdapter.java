@@ -34,7 +34,7 @@ public class StudyOverviewAdapter extends RecyclerView.Adapter<StudyOverviewHold
     @Override
     public void onBindViewHolder(@NonNull StudyOverviewHolder holder, int position) {
         holder.studyName.setText(list.get(position).getStudyName());
-        holder.surveyName.setText(list.get(position).getSurveyName());
+        holder.univName.setText(list.get(position).getUnivName());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -47,4 +47,5 @@ public class StudyOverviewAdapter extends RecyclerView.Adapter<StudyOverviewHold
     public int getItemCount() {
         return list.size();
     }
+
 }

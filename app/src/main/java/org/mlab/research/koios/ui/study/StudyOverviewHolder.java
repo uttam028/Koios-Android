@@ -9,13 +9,13 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class StudyOverviewHolder extends RecyclerView.ViewHolder{
-    TextView surveyName;
+    TextView univName;
     TextView studyName;
 
 
     public StudyOverviewHolder(@NonNull View itemView) {
         super(itemView);
-        surveyName = (TextView) itemView.findViewById(R.id.surveyName);
+        univName = (TextView) itemView.findViewById(R.id.univName);
         studyName = (TextView) itemView.findViewById(R.id.studyName);
     }
 
