@@ -11,4 +11,11 @@
         android:layout_height="match_parent"
         android:text="Open studies fragment" />
 
+    <!-- TODO: Update blank fragment layout -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/studyRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="5dp"/>
+
 </FrameLayout>

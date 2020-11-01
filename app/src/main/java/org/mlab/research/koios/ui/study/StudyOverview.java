@@ -1,6 +1,6 @@
-package org.mlab.research.koios.ui.survey;
+package org.mlab.research.koios.ui.study;
 
-public class SurveyOverview {
+public class StudyOverview {
     private int studyId;
     private int surveyId;
     private String studyName;
@@ -8,7 +8,7 @@ public class SurveyOverview {
     private String lastParticipation;
     private String nextDue;
 
-    public SurveyOverview(int studyId, int surveyId, String studyName, String surveyName, String lastParticipation, String nextDue){
+    public StudyOverview(int studyId, int surveyId, String studyName, String surveyName, String lastParticipation, String nextDue){
         this.studyId = studyId;
         this.surveyId = surveyId;
         this.studyName = studyName;
