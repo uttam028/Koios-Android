@@ -1,5 +1,6 @@
 package org.mlab.research.koios.ui.study;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -18,7 +19,7 @@ import org.mlab.research.koios.R;
 import org.mlab.research.koios.StudySurveyConfig;
 import org.mlab.research.koios.ui.study.StudyOverviewAdapter;
 import org.mlab.research.koios.ui.study.StudyOverview;
-import org.mlab.research.koios.ui.survey.SurveyOverview;
+import org.mlab.research.koios.ui.survey.SurveyDetailsActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -97,9 +98,14 @@ public class OpenStudiesFragment extends Fragment implements ItemClickListener{
     }
 
 
+
     @Override
     public void onItemClick(View view, int position) {
-        return ;
+        Intent intent = new Intent(this.getContext(), StudyDetailsActivity.class);
+        intent.putExtra("study_id", overviewList.get(position).getStudyId());
+        intent.putExtra("study_name", overviewList.get(position).getStudyName());
+        startActivity(intent);
+
     }
 
     private void loadData(){
