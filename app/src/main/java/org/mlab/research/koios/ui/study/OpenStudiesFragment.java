@@ -110,6 +110,8 @@ public class OpenStudiesFragment extends Fragment implements ItemClickListener{
 
     private void loadData(){
         overviewList = new ArrayList<>();
+
+        // get all studies
         for (KoiosStudy study:Koios.getDbHelper().getAllStudies()){
             overviewList.add(new StudyOverview(study.getId(), study.getName(), "University of Notre Dame", ""));
         }
