@@ -75,7 +75,7 @@ public class SignupActivity extends AppCompatActivity {
             try {
                 call.enqueue(new Callback<CimonResponse>() {
                     @Override
-                    public void onResponse(Call<CimonResponse> call, Response<CimonResponse> response) {
+                    public void onResponse(Call<CimonResponse> call, final Response<CimonResponse> response) {
                         Log.d("Response from server", String.valueOf(response.body().getCode()) + ", " + response.body().getMessage());
                         if (response.body().getCode() == 0) {
                             updateAppState();

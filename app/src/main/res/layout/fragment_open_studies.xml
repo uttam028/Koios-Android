@@ -7,7 +7,7 @@
 
     <!-- TODO: Update blank fragment layout -->
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/studyRecyclerView"
+        android:id="@+id/openStudiesRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="5dp"/>
