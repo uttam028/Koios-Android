@@ -1,18 +1,18 @@
 package org.mlab.research.koios.ui.study;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+        import android.view.LayoutInflater;
+        import android.view.View;
+        import android.view.ViewGroup;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
+        import androidx.annotation.NonNull;
+        import androidx.recyclerview.widget.RecyclerView;
 
-import org.mlab.research.koios.R;
-import org.mlab.research.koios.ui.study.ItemClickListener;
-import org.mlab.research.koios.ui.study.StudyOverview;
+        import org.mlab.research.koios.R;
+        import org.mlab.research.koios.ui.study.ItemClickListener;
+        import org.mlab.research.koios.ui.study.StudyOverview;
 
-import java.util.ArrayList;
-import java.util.List;
+        import java.util.ArrayList;
+        import java.util.List;
 
 public class StudyOverviewAdapter extends RecyclerView.Adapter<StudyOverviewHolder> {
 

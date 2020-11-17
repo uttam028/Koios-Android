@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import org.mlab.research.koios.CimonResponse;
 import org.mlab.research.koios.Koios;
+import org.mlab.research.koios.KoiosDbHelper;
 import org.mlab.research.koios.KoiosStudy;
 import org.mlab.research.koios.R;
 import org.mlab.research.koios.StudySurveyConfig;
@@ -132,7 +133,8 @@ public class OpenStudiesFragment extends Fragment implements ItemClickListener {
         overviewList.add(new StudyOverview(123, "Open Study 1", "University of Notre Dame",
                 "Desc", "Instr", ""));
         overviewList.add(new StudyOverview(123, "Open Study 2", "University of Notre Dame",
-                "Desc", "Instr", ""));
+                "Description corresponding to Open Study 2", "Instructions corresponding to Open Study 2", ""));
+
 
 
     }

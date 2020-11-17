@@ -38,9 +38,9 @@ public class MyStudiesFragment extends Fragment implements ItemClickListener{
     private String mParam2;
 
     private RecyclerView recyclerView;
-    private StudyOverviewAdapter adapter;
+    private EnrolledStudyOverviewAdapter adapter;
     private RecyclerView.LayoutManager layoutManager;
-    private List<StudyOverview> overviewList;
+    private List<EnrolledStudyOverview> overviewList;
 
     public MyStudiesFragment() {
         // Required empty public constructor
@@ -87,7 +87,7 @@ public class MyStudiesFragment extends Fragment implements ItemClickListener{
 
         loadData();
         recyclerView = (RecyclerView) getActivity().findViewById(R.id.myStudiesRecyclerView);
-        adapter = new StudyOverviewAdapter(this, overviewList);
+        adapter = new EnrolledStudyOverviewAdapter(this, overviewList);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
@@ -96,9 +96,9 @@ public class MyStudiesFragment extends Fragment implements ItemClickListener{
     public void loadData(){
         overviewList = new ArrayList<>();
 
-        overviewList.add(new StudyOverview(123, "My Enrolled Study 1", "University of Notre Dame",
+        overviewList.add(new EnrolledStudyOverview(123, "My Enrolled Study 1", "University of Notre Dame",
                 "Desc", "Instr", ""));
-        overviewList.add(new StudyOverview(123, "My Enrolled Study 2", "University of Notre Dame",
+        overviewList.add(new EnrolledStudyOverview(123, "My Enrolled Study 2", "University of Notre Dame",
                 "Desc", "Instr", ""));
 
     }
