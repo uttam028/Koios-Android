@@ -8,7 +8,7 @@ public class SurveyOverview {
     private String lastParticipation;
     private String nextDue;
 
-    public SurveyOverview(int studyId, int surveyId, String studyName, String surveyName, String lastParticipation, String nextDue) {
+    public SurveyOverview(int studyId, int surveyId, String studyName, String surveyName, String lastParticipation, String nextDue){
         this.studyId = studyId;
         this.surveyId = surveyId;
         this.studyName = studyName;

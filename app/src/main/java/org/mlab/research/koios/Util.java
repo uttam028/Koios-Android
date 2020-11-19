@@ -47,14 +47,14 @@ public class Util {
         editor.apply();
     }
 
-    static String getPreferenceData(String key) {
+    public static String getPreferenceData(String key) {
         Context context = Koios.getContext();
         SharedPreferences prefs = context.getSharedPreferences(context.getString(R.string.sharedPrefFileName), Context.MODE_PRIVATE);
         return prefs.getString(key, "");
 
     }
 
-    static String getUniqueDeviceId() {
+    public static String getUniqueDeviceId() {
         Context context = Koios.getContext();
         String uuid = getPreferenceData(context.getString(R.string.uuid));
         if (uuid.isEmpty()) {
