@@ -6,9 +6,10 @@
     tools:context=".ui.study.MyStudiesFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/myStudiesRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="My studies fragment" />
+        android:padding="5dp"/>
 
 </FrameLayout>

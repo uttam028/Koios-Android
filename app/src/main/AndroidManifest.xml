@@ -14,6 +14,7 @@
         android:theme="@style/AppTheme">
         <activity android:name=".ui.formmaster.viewholder.FormAudioRecorderActivity"></activity>
         <activity android:name=".ui.survey.SurveyDetailsActivity" />
+        <activity android:name=".ui.study.StudyDetailsActivity" />
         <activity
             android:name=".FlowControlActivity"
             android:theme="@android:style/Theme.NoDisplay">
