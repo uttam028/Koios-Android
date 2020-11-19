@@ -12,6 +12,7 @@ import org.mlab.research.koios.ui.formmaster.listener.ReloadListener;
 import org.mlab.research.koios.ui.formmaster.model.BaseFormElement;
 import org.mlab.research.koios.ui.formmaster.viewholder.BaseViewHolder;
 import org.mlab.research.koios.ui.formmaster.viewholder.FormElementAudioRecorderViewHolder;
+import org.mlab.research.koios.ui.formmaster.viewholder.FormElementCommentMultiLineViewHolder;
 import org.mlab.research.koios.ui.formmaster.viewholder.FormElementHeader;
 import org.mlab.research.koios.ui.formmaster.viewholder.FormElementPickerDateViewHolder;
 import org.mlab.research.koios.ui.formmaster.viewholder.FormElementPickerMultiViewHolder;
@@ -45,6 +46,7 @@ public class FormAdapter extends RecyclerView.Adapter<BaseViewHolder> implements
 
     /**
      * public constructor with context
+     *
      * @param context
      */
     public FormAdapter(Context context, OnFormElementValueChangedListener listener) {
@@ -55,6 +57,7 @@ public class FormAdapter extends RecyclerView.Adapter<BaseViewHolder> implements
 
     /**
      * adds list of elements to be shown
+     *
      * @param formObjects
      */
     public void addElements(List<BaseFormElement> formObjects) {
@@ -64,6 +67,7 @@ public class FormAdapter extends RecyclerView.Adapter<BaseViewHolder> implements
 
     /**
      * adds single element to be shown
+     *
      * @param formObject
      */
     public void addElement(BaseFormElement formObject) {
@@ -73,6 +77,7 @@ public class FormAdapter extends RecyclerView.Adapter<BaseViewHolder> implements
 
     /**
      * set value for any unique index
+     *
      * @param position
      * @param value
      */
@@ -84,6 +89,7 @@ public class FormAdapter extends RecyclerView.Adapter<BaseViewHolder> implements
 
     /**
      * set value for any unique tag
+     *
      * @param tag
      * @param value
      */
@@ -99,6 +105,7 @@ public class FormAdapter extends RecyclerView.Adapter<BaseViewHolder> implements
 
     /**
      * get value of any element by tag
+     *
      * @param index
      * @return
      */
@@ -108,6 +115,7 @@ public class FormAdapter extends RecyclerView.Adapter<BaseViewHolder> implements
 
     /**
      * get value of any element by tag
+     *
      * @param tag
      * @return
      */
@@ -123,6 +131,7 @@ public class FormAdapter extends RecyclerView.Adapter<BaseViewHolder> implements
 
     /**
      * get whole dataset
+     *
      * @return
      */
     public List<BaseFormElement> getDataset() {
@@ -131,6 +140,7 @@ public class FormAdapter extends RecyclerView.Adapter<BaseViewHolder> implements
 
     /**
      * get value changed listener
+     *
      * @return
      */
     public OnFormElementValueChangedListener getValueChangeListener() {
@@ -139,6 +149,7 @@ public class FormAdapter extends RecyclerView.Adapter<BaseViewHolder> implements
 
     /**
      * gets total item count
+     *
      * @return
      */
     @Override
@@ -148,6 +159,7 @@ public class FormAdapter extends RecyclerView.Adapter<BaseViewHolder> implements
 
     /**
      * gets view item type based on header, or the form element type
+     *
      * @param position
      * @return
      */
@@ -158,6 +170,7 @@ public class FormAdapter extends RecyclerView.Adapter<BaseViewHolder> implements
 
     /**
      * creating the view holder to be shown for a position
+     *
      * @param parent
      * @param viewType
      * @return
@@ -208,6 +221,9 @@ public class FormAdapter extends RecyclerView.Adapter<BaseViewHolder> implements
             case BaseFormElement.TYPE_AUDIO_RECORDER:
                 v = inflater.inflate(R.layout.form_element, parent, false);
                 return new FormElementAudioRecorderViewHolder(v);
+            case BaseFormElement.TYPE_COMMENT_MULTILINE:
+                v = inflater.inflate(R.layout.form_element_comment, parent, false);
+                return new FormElementCommentMultiLineViewHolder(v, new FormItemEditTextListener(this));
             default:
                 v = inflater.inflate(R.layout.form_element, parent, false);
                 return new FormElementTextSingleLineViewHolder(v, new FormItemEditTextListener(this));
@@ -216,6 +232,7 @@ public class FormAdapter extends RecyclerView.Adapter<BaseViewHolder> implements
 
     /**
      * draws the view for the position specific view holder
+     *
      * @param holder
      * @param position
      */
@@ -234,6 +251,7 @@ public class FormAdapter extends RecyclerView.Adapter<BaseViewHolder> implements
 
     /**
      * use the listener to update value and notify dataset changes to adapter
+     *
      * @param position
      * @param updatedValue
      */

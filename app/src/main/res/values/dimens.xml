@@ -4,8 +4,8 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
 
     <!-- dimens for formview library-->
-    <dimen name="headerTextSize">15sp</dimen>
-    <dimen name="elementTextTitleSize">14sp</dimen>
-    <dimen name="elementTextValueSize">13sp</dimen>
+    <dimen name="headerTextSize">16sp</dimen>
+    <dimen name="elementTextTitleSize">15sp</dimen>
+    <dimen name="elementTextValueSize">15sp</dimen>
 
 </resources>

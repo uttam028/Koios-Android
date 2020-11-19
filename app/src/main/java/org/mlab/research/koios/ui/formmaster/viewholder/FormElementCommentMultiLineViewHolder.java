@@ -16,15 +16,13 @@ import androidx.appcompat.widget.AppCompatTextView;
  * Created by Riddhi - Rudra on 30-Jul-17.
  */
 
-public class FormElementTextMultiLineViewHolder extends BaseViewHolder {
+public class FormElementCommentMultiLineViewHolder extends BaseViewHolder {
 
-    public AppCompatTextView mTextViewTitle;
     public AppCompatEditText mEditTextValue;
     public FormItemEditTextListener mFormCustomEditTextListener;
 
-    public FormElementTextMultiLineViewHolder(View v, FormItemEditTextListener listener) {
+    public FormElementCommentMultiLineViewHolder(View v, FormItemEditTextListener listener) {
         super(v);
-        mTextViewTitle = (AppCompatTextView) v.findViewById(R.id.formElementTitle);
         mEditTextValue = (AppCompatEditText) v.findViewById(R.id.formElementValue);
         mFormCustomEditTextListener = listener;
         mEditTextValue.addTextChangedListener(mFormCustomEditTextListener);
@@ -40,10 +38,8 @@ public class FormElementTextMultiLineViewHolder extends BaseViewHolder {
 
     @Override
     public void bind(int position, BaseFormElement formElement, final Context context) {
-        mTextViewTitle.setText(formElement.getTitle());
         mEditTextValue.setText(formElement.getValue());
         mEditTextValue.setHint(formElement.getHint());
-
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

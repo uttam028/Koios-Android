@@ -20,6 +20,7 @@ public class BaseFormElement {
     public static final int TYPE_PICKER_MULTI = 10;
     public static final int TYPE_SWITCH = 11;
     public static final int TYPE_AUDIO_RECORDER = 12;
+    public static final int TYPE_COMMENT_MULTILINE=13;
 
     // private variables
     private int mTag; // unique tag to identify the object

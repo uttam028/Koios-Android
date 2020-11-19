@@ -1,21 +1,30 @@
 package org.mlab.research.koios.ui.survey;
 
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import org.mlab.research.koios.CimonResponse;
 import org.mlab.research.koios.Koios;
+import org.mlab.research.koios.KoiosStudy;
 import org.mlab.research.koios.R;
 import org.mlab.research.koios.StudySurveyTask;
+import org.mlab.research.koios.Util;
 import org.mlab.research.koios.ui.formmaster.FormBuilder;
 import org.mlab.research.koios.ui.formmaster.model.BaseFormElement;
 import org.mlab.research.koios.ui.formmaster.model.FormElementAudioRecorder;
+import org.mlab.research.koios.ui.formmaster.model.FormElementCommentMultiLine;
 import org.mlab.research.koios.ui.formmaster.model.FormElementPickerDate;
 import org.mlab.research.koios.ui.formmaster.model.FormElementPickerMulti;
 import org.mlab.research.koios.ui.formmaster.model.FormElementPickerSingle;
@@ -82,10 +91,11 @@ public class SurveyDetailsActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         //Toast.makeText(getApplicationContext(),"menu "+ item.getItemId() + "," + mRecyclerView.getChildCount(),Toast.LENGTH_SHORT).show();
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.survey_submit:
-//                startNextActivity();
-//                updateAppState();
+                if (validateForm()) {
+                    uploadData();
+                }
                 return true;
             default:
                 onBackPressed();
@@ -94,50 +104,161 @@ public class SurveyDetailsActivity extends AppCompatActivity {
 
     }
 
-    private void setupForm(){
+    private void uploadData() {
+        ArrayList<SurveyResponse> responseList = new ArrayList<>();
+        for (StudySurveyTask task : taskList) {
+            if (task.getType().equalsIgnoreCase("instruction"))
+                continue;
+            BaseFormElement formElement = formBuilder.getFormElement(task.getTaskId());
+            SurveyResponse surveyResponse = new SurveyResponse();
+            surveyResponse.setStudyId(task.getStudyId());
+            surveyResponse.setSurveyId(task.getSurveyId());
+            surveyResponse.setTaskId(task.getTaskId());
+            surveyResponse.setVersion(task.getVersion());
+            if (task.getType().equalsIgnoreCase("recording")){
+                surveyResponse.setAnswerType("object");
+            }else{
+                surveyResponse.setAnswerType("value");
+            }
+            surveyResponse.setAnswer(formElement.getValue());
+            surveyResponse.setSubmissionTime(System.currentTimeMillis()+"");
+            if (task.getHasComment() == 1) {
+                BaseFormElement commentElement = formBuilder.getFormElement(-task.getTaskId());
+                if (commentElement != null && !commentElement.getValue().isEmpty()) {
+                    surveyResponse.setComment(commentElement.getValue());
+                }
+            }
+            responseList.add(surveyResponse);
+        }
+        if (responseList.size()>0){
+            String uuid = Util.getUniqueDeviceId();
+            String email = Util.getPreferenceData(Koios.getContext().getString(R.string.userEmail));
+//        Log.d(TAG, "response size:" + r)
+
+            Call<CimonResponse> call = Koios.getService().uplaodSurveyResponse(email, uuid, responseList);
+            try {
+                call.enqueue(new Callback<CimonResponse>() {
+                    @Override
+                    public void onResponse(Call<CimonResponse> call, Response<CimonResponse> response) {
+                        if (response.body().getCode()==0){
+                            showDialog("Submission Successful", "Thank you for your participation to the survey.");
+                        }else {
+                            showDialog("Submission Failure", "Please try later!");
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<CimonResponse> call, Throwable t) {
+                        showDialog("Survey Submission", "Please try later!");
+                    }
+                });
+            }catch (Exception e){
+
+            }
+        }
+
+    }
+
+    private boolean validateForm() {
+        //if there was no comment type, then we could use formBuilder.validate(), but now we have to check manually
+        boolean valid = true;
+        for (StudySurveyTask task : taskList) {
+            if (task.getType().equalsIgnoreCase("instruction")) {
+                //do nothing
+            } else {
+                if (task.getIsRequired() == 1) {
+                    BaseFormElement formElement = formBuilder.getFormElement(task.getTaskId());
+                    if (task.getHasComment() == 1) {
+                        BaseFormElement commentElement = formBuilder.getFormElement(-task.getTaskId());
+                        if (formElement.getValue().isEmpty() && commentElement.getValue().isEmpty()) {
+                            valid = false;
+                            showDialog("Response Verification", "Answer required for question " + task.getTaskId());
+                            break;
+                        }
+                    } else if (formElement.getValue().isEmpty()) {
+                        valid = false;
+                        showDialog("Response Verification", "Answer required for question " + task.getTaskId());
+                        break;
+                    }
+                }
+            }
+        }
+        return valid;
+    }
+
+    private void showDialog(String title, String message) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        if (title != null && !title.isEmpty()) {
+            builder.setTitle(title);
+        }
+        if (message != null && !message.isEmpty()) {
+            builder.setMessage(message);
+        }
+        //builder.setMessage("Are you sure?");
+        builder.setPositiveButton("Ok, Got It.", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+
+    private void setupForm() {
         formRecyclerView = (RecyclerView) findViewById(R.id.surveyFormRecyclerView);
         formBuilder = new FormBuilder(this, formRecyclerView);
 
         List<BaseFormElement> formItems = new ArrayList<>();
-        for (StudySurveyTask task:taskList){
+        for (StudySurveyTask task : taskList) {
 
-            if (task.getType().equalsIgnoreCase("instruction")){
-                String starter = (task.getType().equalsIgnoreCase("instruction") ? "" : (task.getIsRequired()==1?"*Q. ":"Q. "));
-                String taskText = starter + task.getTaskText();
+            if (task.getType().equalsIgnoreCase("instruction")) {
                 FormHeader header = FormHeader.createInstance(task.getTaskText());
                 formItems.add(header);
 
-            }else{
-                String taskText = (task.getIsRequired()==1?"*Q. ":"Q. ") + task.getTaskText();
+            } else {
+                String taskText = (task.getIsRequired() == 1 ? "*Q. " : "Q. ") + task.getTaskText();
                 FormHeader header = FormHeader.createInstance(taskText);
                 formItems.add(header);
                 BaseFormElement element = null;
-                if (task.getType().equalsIgnoreCase("text")){
+                if (task.getType().equalsIgnoreCase("text")) {
                     element = FormElementTextSingleLine.createInstance().setTitle("Type Answer");
                     formItems.add(element);
-                }else if (task.getType().equalsIgnoreCase("textarea")){
+                } else if (task.getType().equalsIgnoreCase("textarea")) {
                     element = FormElementTextMultiLine.createInstance().setTitle("Type Answer");
                     formItems.add(element);
-                }else if (task.getType().equalsIgnoreCase("date")){
+                } else if (task.getType().equalsIgnoreCase("date")) {
                     element = FormElementPickerDate.createInstance().setTitle("Date").setDateFormat("MMM dd, yyyy");
                     formItems.add(element);
-                }else if (task.getType().equalsIgnoreCase("selection")){
-                    String [] inputs = task.getPossibleInput().split("[|]");
+                } else if (task.getType().equalsIgnoreCase("selection")) {
+                    String[] inputs = task.getPossibleInput().split("[|]");
                     element = FormElementPickerSingle.createInstance().setTitle("Select Answer").setOptions(Arrays.asList(inputs)).setPickerTitle("Pick any item");
                     formItems.add(element);
-                }else if (task.getType().equalsIgnoreCase("choice")){
-                    String [] inputs = task.getPossibleInput().split("[|]");
+                } else if (task.getType().equalsIgnoreCase("choice")) {
+                    String[] inputs = task.getPossibleInput().split("[|]");
                     element = FormElementPickerMulti.createInstance().setTitle("Select Answers").setOptions(Arrays.asList(inputs)).setPickerTitle("Pick one or more").setNegativeText("reset");
-                    element.setRequired(task.getIsRequired()==1);
+                    element.setRequired(task.getIsRequired() == 1);
                     formItems.add(element);
-                }else if (task.getType().equalsIgnoreCase("recording")){
+                } else if (task.getType().equalsIgnoreCase("recording")) {
                     element = FormElementAudioRecorder.createInstance().setTitle("Click to Start");
                     formItems.add(element);
-
+                }
+                if (element != null) {
+                    element.setTag(task.getTaskId());
+                    if (task.getIsRequired() == 1) {
+                        element.setRequired(true);
+                    } else {
+                        element.setRequired(false);
+                    }
+                    if (task.getHasComment() == 1) {
+                        BaseFormElement commentElement = FormElementCommentMultiLine.createInstance().setHint("Please Specify");
+                        formItems.add(commentElement);
+                        commentElement.setTag(-task.getTaskId());
+                    }
                 }
             }
-
-
 
 
             formBuilder.addFormElements(formItems);

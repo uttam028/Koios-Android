@@ -1,9 +1,13 @@
 package org.mlab.research.koios;
 
+import org.mlab.research.koios.ui.survey.SurveyResponse;
+
 import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.MultipartBody;
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
@@ -27,7 +31,7 @@ public interface CimonService {
 
     @GET("study/enroll")
     Call<CimonResponse> enrollToStudy(@Query("id") String studyId, @Query("email") String email, @Query("uuid") String uuid,
-                                      @Query("jointime") String joinTime, @Query("jointimezone") String joinTimeZone);
+                                      @Query("jointime") String joinTime, @Query("jointimezone") String joinTimeZoSne);
 
 
     //https://koiosplatform.com/mcsweb/cimoninterface/study/list/enrolled/active?email=uttam028@gmail.com&uuid=732819hjkd
@@ -93,5 +97,10 @@ public interface CimonService {
 //    @Headers("secret:koiosByAfzalFromNDmL@b")
 //    @GET("temp/s3/credential")
 //    Call<S3Credential> getS3Info();
+
+
+    ///------------------------------------Survey--------------------------///
+    @POST("study/survey/response")
+    Call<CimonResponse> uplaodSurveyResponse(@Query("email") String email, @Query("uuid") String uuid, @Body List<SurveyResponse> responses);
 
 }
