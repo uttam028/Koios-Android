@@ -87,3 +87,6 @@ lint/tmp/
 
 # Mac OS X clutter
 *.DS_Store
+
+#local properties
+local.properties
