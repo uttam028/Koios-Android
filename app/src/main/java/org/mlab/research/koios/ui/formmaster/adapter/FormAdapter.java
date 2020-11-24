@@ -1,11 +1,13 @@
 package org.mlab.research.koios.ui.formmaster.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import org.mlab.research.koios.R;
+import org.mlab.research.koios.ui.formmaster.listener.ExternalActivityRequestListener;
 import org.mlab.research.koios.ui.formmaster.listener.FormItemEditTextListener;
 import org.mlab.research.koios.ui.formmaster.listener.OnFormElementValueChangedListener;
 import org.mlab.research.koios.ui.formmaster.listener.ReloadListener;
@@ -25,6 +27,7 @@ import org.mlab.research.koios.ui.formmaster.viewholder.FormElementTextNumberVie
 import org.mlab.research.koios.ui.formmaster.viewholder.FormElementTextPasswordViewHolder;
 import org.mlab.research.koios.ui.formmaster.viewholder.FormElementTextPhoneViewHolder;
 import org.mlab.research.koios.ui.formmaster.viewholder.FormElementTextSingleLineViewHolder;
+import org.mlab.research.koios.ui.formmaster.viewholder.RecordingRequestListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,24 +39,27 @@ import androidx.recyclerview.widget.RecyclerView;
  * Created by Adib on 16-Apr-17.
  */
 
-public class FormAdapter extends RecyclerView.Adapter<BaseViewHolder> implements ReloadListener {
+public class FormAdapter extends RecyclerView.Adapter<BaseViewHolder> implements ReloadListener, ExternalActivityRequestListener {
 
     public static final String TAG = FormAdapter.class.getName() + "_debug";
 
     private Context mContext;
     private List<BaseFormElement> mDataset;
     private OnFormElementValueChangedListener mListener;
+    private RecordingRequestListener recordingRequestListener;
 
     /**
      * public constructor with context
      *
      * @param context
      */
-    public FormAdapter(Context context, OnFormElementValueChangedListener listener) {
+    public FormAdapter(Context context, OnFormElementValueChangedListener listener, RecordingRequestListener recordingRequestListener) {
         mContext = context;
         mListener = listener;
         mDataset = new ArrayList<>();
+        this.recordingRequestListener = recordingRequestListener;
     }
+
 
     /**
      * adds list of elements to be shown
@@ -220,7 +226,7 @@ public class FormAdapter extends RecyclerView.Adapter<BaseViewHolder> implements
                 return new FormElementSwitchViewHolder(v, mContext, this);
             case BaseFormElement.TYPE_AUDIO_RECORDER:
                 v = inflater.inflate(R.layout.form_element, parent, false);
-                return new FormElementAudioRecorderViewHolder(v);
+                return new FormElementAudioRecorderViewHolder(v, this);
             case BaseFormElement.TYPE_COMMENT_MULTILINE:
                 v = inflater.inflate(R.layout.form_element_comment, parent, false);
                 return new FormElementCommentMultiLineViewHolder(v, new FormItemEditTextListener(this));
@@ -263,4 +269,11 @@ public class FormAdapter extends RecyclerView.Adapter<BaseViewHolder> implements
             mListener.onValueChanged(mDataset.get(position));
     }
 
+    @Override
+    public void processExternalActivityRequest(int formElementTag) {
+        Log.d(TAG, "process external form request");
+        if (recordingRequestListener!=null){
+            recordingRequestListener.processRecordingRequest(formElementTag);
+        }
+    }
 }

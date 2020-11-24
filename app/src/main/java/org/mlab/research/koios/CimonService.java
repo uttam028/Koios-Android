@@ -4,6 +4,7 @@ import org.mlab.research.koios.ui.survey.SurveyResponse;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import okhttp3.MultipartBody;
 import retrofit2.Call;
@@ -30,8 +31,13 @@ public interface CimonService {
     Call<ArrayList<KoiosStudy>> getOpenStudies(@Query("email") String email);
 
     @GET("study/enroll")
-    Call<CimonResponse> enrollToStudy(@Query("id") String studyId, @Query("email") String email, @Query("uuid") String uuid,
+    Call<CimonResponse> enrollToStudy(@Query("id") int studyId, @Query("email") String email, @Query("uuid") String uuid,
                                       @Query("jointime") String joinTime, @Query("jointimezone") String joinTimeZoSne);
+
+
+    @Headers("secret:koiosByAfzalFromNDmL@b")
+    @GET("study/leave")
+    Call<CimonResponse> leaveStudy(@Query("id") int studyId, @Query("email") String email);
 
 
     //https://koiosplatform.com/mcsweb/cimoninterface/study/list/enrolled/active?email=uttam028@gmail.com&uuid=732819hjkd
@@ -102,5 +108,15 @@ public interface CimonService {
     ///------------------------------------Survey--------------------------///
     @POST("study/survey/response")
     Call<CimonResponse> uplaodSurveyResponse(@Query("email") String email, @Query("uuid") String uuid, @Body List<SurveyResponse> responses);
+
+//    "files/upload_study_object?email=\(email)&uuid=\(Utils.getDeviceIdentifier())&studyId=\(self.studyId)"
+    @Multipart
+    @Headers("secret:koiosByAfzalFromNDmL@b")
+    @POST("files/upload_study_object")
+    Call<CimonResponse> uploadSurveyObject(@Query("email") String email, @Query("uuid") String uuid, @Query("studyId") int studyId, @Part MultipartBody.Part file);
+
+    ///-----Profile-----///
+    @POST("signup/profile")
+    Call<CimonResponse> uploadProfile(@Query("email") String email, @Query("uuid") String uuid, @Body Map<String, String> profile);
 
 }

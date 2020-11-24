@@ -1,11 +1,15 @@
 package org.mlab.research.koios.ui.survey;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,6 +23,7 @@ import org.mlab.research.koios.Koios;
 import org.mlab.research.koios.KoiosStudy;
 import org.mlab.research.koios.R;
 import org.mlab.research.koios.StudySurveyConfig;
+import org.mlab.research.koios.Util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,6 +73,18 @@ public class SurveyFragment extends Fragment implements ItemClickListener {
 //            mParam1 = getArguments().getString(ARG_PARAM1);
 //            mParam2 = getArguments().getString(ARG_PARAM2);
 //        }
+        observeLocalDB();
+    }
+
+    private void observeLocalDB(){
+        final Observer<Boolean> surveyListObserver = new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                Log.d(TAG, "<<<<<<<<<<<,Survey list has been changed>>>>>>>>>>>>>>>");
+                loadRecyclerView();
+            }
+        };
+        Koios.getSurveyListChanged().observe(this, surveyListObserver);
     }
 
     @Override
@@ -83,12 +100,16 @@ public class SurveyFragment extends Fragment implements ItemClickListener {
         super.onActivityCreated(savedInstanceState);
         Log.d(TAG, "activity created from survey..");
 
+        loadRecyclerView();
+    }
+
+    private void loadRecyclerView(){
+
         loadData();
         recyclerView = (RecyclerView) getActivity().findViewById(R.id.surveyRecyclerView);
         adapter = new SurveyOverviewAdapter(this, overviewList);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
     }
 
     @Override
@@ -103,16 +124,52 @@ public class SurveyFragment extends Fragment implements ItemClickListener {
         Intent intent = new Intent(this.getContext(), SurveyDetailsActivity.class);
         intent.putExtra("study_id", overviewList.get(position).getStudyId());
         intent.putExtra("survey_id", overviewList.get(position).getSurveyId());
-        startActivity(intent);
-
+        startActivityForResult(intent, Util.SURVEY_SUBMIT_REQUEST);
     }
 
     private void loadData(){
         overviewList = new ArrayList<>();
         for (KoiosStudy study:Koios.getDbHelper().getAllStudies()){
             for (StudySurveyConfig survey:Koios.getDbHelper().getSurveyConfigsOfTheStudy(study.getId())){
-                overviewList.add(new SurveyOverview(survey.getStudyId(), survey.getId(), study.getName(), survey.getName(), "", ""));
+                String key = "survey-" + survey.getId() + "-lastresponse";
+                String lastResponse = Util.getPreferenceData(key);
+                if(survey.getSchedule().startsWith("once") && Util.isValidDate(lastResponse)){
+                    //already took part in the survey, do not need to include them
+                    continue;
+                }
+                overviewList.add(new SurveyOverview(survey.getStudyId(), survey.getId(), study.getName(), survey.getName(), survey.getSchedule(), lastResponse));
             }
         }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Util.SURVEY_SUBMIT_SUCCESS){
+            showDialog("Submission Successful", "Thank you for your participation to the survey.");
+//            adapter.notifyDataSetChanged();
+            loadRecyclerView();
+        }else if (resultCode == Util.SURVEY_SUBMIT_FAILURE){
+
+        }
+    }
+
+    private void showDialog(String title, String message) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        if (title != null && !title.isEmpty()) {
+            builder.setTitle(title);
+        }
+        if (message != null && !message.isEmpty()) {
+            builder.setMessage(message);
+        }
+        //builder.setMessage("Are you sure?");
+        builder.setPositiveButton("Ok, Got It.", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 }

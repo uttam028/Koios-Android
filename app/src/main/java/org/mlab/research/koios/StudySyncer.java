@@ -231,56 +231,67 @@ public class StudySyncer {
 
 
     private void syncSurveyConfigsOfStudy(final int studyId) {
+        Log.d(TAG, "syncing surveys of study id:"+ studyId);
         Call<ArrayList<StudySurveyConfig>> call = Koios.getService().getSurveyConfigs(studyId);
         try {
             call.enqueue(new Callback<ArrayList<StudySurveyConfig>>() {
                 @Override
                 public void onResponse(Call<ArrayList<StudySurveyConfig>> call, final Response<ArrayList<StudySurveyConfig>> response) {
-
+                    Log.d(TAG, "call success for sync survey");
                     HashMap<Integer, StudySurveyConfig> localConfigs = new HashMap<>();
                     for (StudySurveyConfig localConfig : Koios.getDbHelper().getSurveyConfigsOfTheStudy(studyId)) {
+                        Log.d(TAG, "survey in local, id:" + localConfig.getId());
                         localConfigs.put(localConfig.getId(), localConfig);
                     }
 
                     ArrayList<StudySurveyConfig> serverConfigs = response.body();
+                    Log.d(TAG, "surveys in server:" + serverConfigs.size());
                     for (int i = 0; i < serverConfigs.size(); i++) {
                         int serverSurveyId = serverConfigs.get(i).getId();
+                        String serverModificationTime = serverConfigs.get(i).getModificationTime() == null ? "" : serverConfigs.get(i).getModificationTime();
                         String serverPublishTime = serverConfigs.get(i).getPublishTime() == null ? "" : serverConfigs.get(i).getPublishTime();
                         int serverPublishVersion = serverConfigs.get(i).getPublishedVersion();
+                        Log.d(TAG, "server survey id:"+ serverSurveyId + ", server modif time:" + serverModificationTime +
+                                ", server pub time:" + serverPublishTime + ", server pub version:" + serverPublishVersion);
                         if (localConfigs.containsKey(serverSurveyId)) {
                             //config present in local db
+                            String localModificationTime = localConfigs.get(serverSurveyId).getModificationTime() == null ? "" : localConfigs.get(serverSurveyId).getModificationTime();
                             String localPublishTime = localConfigs.get(serverSurveyId).getPublishTime() == null ? "" : localConfigs.get(serverSurveyId).getPublishTime();
                             int localPublishVersion = localConfigs.get(serverSurveyId).getPublishedVersion();
-                            if (serverPublishTime.equals(localPublishTime) && serverPublishVersion == localPublishVersion) {
+                            Log.d(TAG, "local modif timee:"+ localModificationTime + ", local pub time:" + localPublishTime + ", local pub version:"+ localPublishVersion);
+                            if (serverModificationTime.equals(localModificationTime) && serverPublishTime.equals(localPublishTime) && serverPublishVersion == localPublishVersion) {
                                 //both are same, no need to update
+                                Log.d(TAG, "local and server survey time is same, no need to update");
                             } else {
+                                Log.d(TAG, "local and server survey time is not same, replacing local version");
                                 Koios.getDbHelper().insertStudySurveyConfig(serverConfigs.get(i));
                                 syncSurveyTasks(studyId, serverSurveyId);
                             }
                             localConfigs.remove(serverSurveyId);
                         } else {
                             //config not present in local db, need to insert
+                            Log.d(TAG, "survey config not present in local db, need to insert");
                             Koios.getDbHelper().insertStudySurveyConfig(serverConfigs.get(i));
                             syncSurveyTasks(studyId, serverSurveyId);
                         }
                     }
 
                     //remove remaining items from hashmap and local db
+                    Log.d(TAG, "remove remaining surveys from hashmap and local db");
                     for (int key : localConfigs.keySet()) {
+                        Log.d(TAG, "remove survey for id:"+ key);
                         Koios.getDbHelper().deleteSurveyConfig(key);
                         Koios.getDbHelper().deleteSurveyTasks(studyId, key);
                     }
-
-
                 }
 
                 @Override
                 public void onFailure(Call<ArrayList<StudySurveyConfig>> call, Throwable t) {
-
+                    Log.d(TAG, "call failure:" + t.getMessage());
                 }
             });
         } catch (Exception e) {
-
+            Log.d(TAG, "exception:" + e.getMessage());
         }
 
     }

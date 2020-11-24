@@ -5,16 +5,16 @@ public class SurveyOverview {
     private int surveyId;
     private String studyName;
     private String surveyName;
+    private String schedule;
     private String lastParticipation;
-    private String nextDue;
 
-    public SurveyOverview(int studyId, int surveyId, String studyName, String surveyName, String lastParticipation, String nextDue){
+    public SurveyOverview(int studyId, int surveyId, String studyName, String surveyName, String schedule, String lastParticipation){
         this.studyId = studyId;
         this.surveyId = surveyId;
         this.studyName = studyName;
         this.surveyName = surveyName;
+        this.schedule = schedule;
         this.lastParticipation = lastParticipation;
-        this.nextDue = nextDue;
     }
 
     public int getStudyId() {
@@ -33,11 +33,12 @@ public class SurveyOverview {
         return surveyName;
     }
 
+    public String getSchedule() {
+        return schedule;
+    }
+
     public String getLastParticipation() {
         return lastParticipation;
     }
 
-    public String getNextDue() {
-        return nextDue;
-    }
 }

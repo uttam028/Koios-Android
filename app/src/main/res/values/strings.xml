@@ -44,7 +44,17 @@
     <string name="lastStepEventTime">lastStepEventTime</string>
     <string name="lastStepCount">lastStepCount</string>
     <string name="signupText">Signup</string>
-    <string name="title_study">Studies</string>
+    <string name="title_study">Study</string>
 
+    <!-->Strings for profile<-->
+    <string name="firstName">firstname</string>
+    <string name="lastName">lastname</string>
+    <string name="deviceModel">device_model_number</string>
+    <string name="birthDate">birthdate</string>
+    <string name="gender">gender</string>
+    <string name="ethnicity">ethnicity</string>
+    <string name="language">language</string>
+    <string name="education">education</string>
+    <string name="organization">organization</string>
 
 </resources>

@@ -1,6 +1,7 @@
 package org.mlab.research.koios.ui.study;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -9,7 +10,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
 public class StudyPagerAdapter extends FragmentPagerAdapter {
-
+    private final static String TAG = StudyPagerAdapter.class.getSimpleName()+"_debug";
 
     public StudyPagerAdapter(@NonNull FragmentManager fm, int behavior) {
         super(fm, behavior);
@@ -28,9 +29,11 @@ public class StudyPagerAdapter extends FragmentPagerAdapter {
 //            // Our object is just an integer :-P
 //            args.putInt(MyStudiesFragment.ARG_OBJECT, i + 1);
 //            fragment.setArguments(args);
+            Log.d(TAG, "position 1 for my studies");
             return fragment;
         }else{
             Fragment fragment = new OpenStudiesFragment();
+            Log.d(TAG, "position "+ position +" for open studies");
             return fragment;
         }
     }
@@ -44,9 +47,12 @@ public class StudyPagerAdapter extends FragmentPagerAdapter {
     @Override
     public CharSequence getPageTitle(int position) {
         if (position==1){
+            Log.d(TAG, "my studies position has been changed");
             return "My Studies";
         }else{
+            Log.d(TAG, "open studies position has been changed");
             return "Open Studies";
         }
     }
+
 }

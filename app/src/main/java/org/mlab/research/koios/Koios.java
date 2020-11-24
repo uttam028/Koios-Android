@@ -15,6 +15,7 @@ import org.mlab.research.koios.ui.map.MapDBHelper;
 import org.mlab.research.koios.ui.map.VisitProcessingJobService;
 
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.MutableLiveData;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -26,6 +27,10 @@ public class Koios extends Application implements Application.ActivityLifecycleC
     private static KoiosDbHelper dbHelper;
     private int activityReferences = 0;
     private boolean isActivityChangingConfigurations = false;
+
+    private static MutableLiveData<Boolean> surveyListChanged = new MutableLiveData<>();
+    private static MutableLiveData<Boolean> studyEnrolled = new MutableLiveData<>();
+
 
     private static CimonService service;
 
@@ -83,7 +88,6 @@ public class Koios extends Application implements Application.ActivityLifecycleC
         Log.d(TAG, "activity resumed, name:" + activity.getLocalClassName());
         if(activity instanceof MainActivity){
             Log.d(TAG, "I can start syncing study");
-            StudySyncer.getInstance().syncStudies();
         }
     }
 
@@ -98,6 +102,14 @@ public class Koios extends Application implements Application.ActivityLifecycleC
         if (++activityReferences == 1 && !isActivityChangingConfigurations) {
             // App enters foreground
             Log.d(TAG, "App enters foreground?");
+//            String appState = Util.getPreferenceData(getString(R.string.appState));
+//            if (appState.equalsIgnoreCase(getString(R.string.verified))) {
+//                Log.d(TAG, "syncing study from Koios");
+//                StudySyncer.getInstance().syncStudies();
+//            }
+            if (activity instanceof MainActivity){
+                StudySyncer.getInstance().syncStudies();
+            }
 
         }
     }
@@ -166,5 +178,13 @@ public class Koios extends Application implements Application.ActivityLifecycleC
 
     public static KoiosDbHelper getDbHelper() {
         return dbHelper;
+    }
+
+    public static MutableLiveData<Boolean> getSurveyListChanged() {
+        return surveyListChanged;
+    }
+
+    public static MutableLiveData<Boolean> getStudyEnrolled() {
+        return studyEnrolled;
     }
 }

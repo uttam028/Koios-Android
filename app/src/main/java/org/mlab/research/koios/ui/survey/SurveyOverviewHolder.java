@@ -9,14 +9,15 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class SurveyOverviewHolder extends RecyclerView.ViewHolder{
-    TextView surveyName;
-    TextView studyName;
-
+    TextView tvSurveyName;
+    TextView tvStudyName;
+    TextView tvLastParticipation;
 
     public SurveyOverviewHolder(@NonNull View itemView) {
         super(itemView);
-        surveyName = (TextView) itemView.findViewById(R.id.surveyName);
-        studyName = (TextView) itemView.findViewById(R.id.studyName);
+        tvSurveyName = (TextView) itemView.findViewById(R.id.surveyName);
+        tvStudyName = (TextView) itemView.findViewById(R.id.openStudyName);
+        tvLastParticipation = (TextView) itemView.findViewById(R.id.lastParticipation);
     }
 
 }

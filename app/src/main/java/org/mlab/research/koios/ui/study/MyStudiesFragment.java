@@ -1,13 +1,17 @@
 package org.mlab.research.koios.ui.study;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,18 +19,18 @@ import android.view.ViewGroup;
 import org.mlab.research.koios.Koios;
 import org.mlab.research.koios.KoiosStudy;
 import org.mlab.research.koios.R;
+import org.mlab.research.koios.Util;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import retrofit2.Call;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link MyStudiesFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MyStudiesFragment extends Fragment implements ItemClickListener{
+public class MyStudiesFragment extends Fragment implements ItemClickListener {
+
+    private static final String TAG = MyStudiesFragment.class.getSimpleName() + "_debug";
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -38,9 +42,11 @@ public class MyStudiesFragment extends Fragment implements ItemClickListener{
     private String mParam2;
 
     private RecyclerView recyclerView;
-    private EnrolledStudyOverviewAdapter adapter;
+    private StudyOverviewAdapter adapter;
     private RecyclerView.LayoutManager layoutManager;
-    private List<EnrolledStudyOverview> overviewList;
+    private List<KoiosStudy> overviewList;
+    private int leavingStudyPosition = -1;
+
 
     public MyStudiesFragment() {
         // Required empty public constructor
@@ -71,6 +77,18 @@ public class MyStudiesFragment extends Fragment implements ItemClickListener{
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        observeLocalDB();
+    }
+
+    private void observeLocalDB(){
+        final Observer<Boolean> studyListObserver = new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                Log.d(TAG, "<<<<<<<<<<<My study list has been changed>>>>>>>>>>>>>>>");
+                loadRecyclerView();
+            }
+        };
+        Koios.getStudyEnrolled().observe(this, studyListObserver);
     }
 
     @Override
@@ -84,81 +102,60 @@ public class MyStudiesFragment extends Fragment implements ItemClickListener{
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        loadRecyclerView();
+    }
 
-        loadData();
+    private void loadRecyclerView(){
+        overviewList = Koios.getDbHelper().getAllStudies();
         recyclerView = (RecyclerView) getActivity().findViewById(R.id.myStudiesRecyclerView);
-        adapter = new EnrolledStudyOverviewAdapter(this, overviewList);
+        adapter = new StudyOverviewAdapter(this, overviewList);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
     }
 
-    public void loadData(){
-        overviewList = new ArrayList<>();
-
-        overviewList.add(new EnrolledStudyOverview(123, "My Enrolled Study 1", "University of Notre Dame",
-                "Desc", "Instr", ""));
-        overviewList.add(new EnrolledStudyOverview(123, "My Enrolled Study 2", "University of Notre Dame",
-                "Desc", "Instr", ""));
-
-    }
 
     @Override
     public void onItemClick(View view, int position) {
+        leavingStudyPosition = position;
         Intent intent = new Intent(this.getContext(), StudyDetailsActivity.class);
 
         // TODO: make this pass a object isntead of several variables
-        intent.putExtra("study_id", overviewList.get(position).getStudyId());
-        intent.putExtra("study_name", overviewList.get(position).getStudyName());
-        intent.putExtra("study_description", overviewList.get(position).getStudyDescription());
-        intent.putExtra("study_instructions", overviewList.get(position).getStudyInstructions());
-        intent.putExtra("enrolled", true);
-        startActivity(intent);
+        intent.putExtra("study", overviewList.get(position));
+        intent.putExtra("action", "leave");
+//        startActivity(intent);
+        startActivityForResult(intent, Util.LEAVE_REQUEST_CODE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d(TAG, "request code:" + requestCode + ", result code:" + resultCode);
+
+        if (requestCode == Util.LEAVE_REQUEST_CODE && resultCode == Util.STUDY_LEAVE_SUCCESS) {
+
+            showConfirmation("Confirmation", "Thank you for your participation to the study.");
+            try {
+                overviewList.remove(leavingStudyPosition);
+                adapter.notifyItemRemoved(leavingStudyPosition);
+            }catch (Exception e){
+
+            }
+        } else if (requestCode == Util.LEAVE_REQUEST_CODE && resultCode == Util.STUDY_LEAVE_FAILURE) {
+            showConfirmation("Error", "Service not available. Please try later.");
+        }
 
     }
 
-    //    public void loadData(final Callback<KoiosStudy> myCallback){
-//        overviewList = new ArrayList<>();
-//        // get open studies
-//        String uuid = Util.getUniqueDeviceId();
-//        String email = Util.getPreferenceData(Koios.getContext().getString(R.string.userEmail));
-//
-//
-//
-//        // make cimon call to get list of open studies
-//       Call<ArrayList<KoiosStudy>> call = Koios.getService().getEnrolledStudies(email, "");
-//        try {
-//            call.enqueue(new Callback<ArrayList<KoiosStudy>>() {
-//                @Override
-//                public void onResponse(Call<ArrayList<KoiosStudy>> call, final Response<ArrayList<KoiosStudy>> response) {
-//
-//                    Log.d("tag", "This is a test");
-//
-//                    // get ArrayList of open studies
-//                    ArrayList<KoiosStudy> openStudies = response.body() == null ? new ArrayList<>() : response.body());
-//
-//                    // HOW DO I UPDATE THE UI WITH openStudies??
-//
-//
-//
-//                }
-//
-//
-//                @Override
-//                public void onFailure(Call<ArrayList<KoiosStudy>> call, Throwable t) {
-//                    Log.d("openstudies", "failed to get Open Studies data " + t.getMessage());
-//                    callbacks.onError();
-//                }
-//            });
-//        } catch (Exception e) {
-//            Log.d("openstudies", "error in getting open studies data " + e.getMessage());
-//        }
-//    }
-//
-//    public interface myCallback {
-//        void onSuccess(ArrayList<KoiosStudy> studies);
-//
-//        void onError();
-//    }
-
-}
+    private void showConfirmation(String title, String message) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle(title);
+        builder.setMessage(message);
+        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }}

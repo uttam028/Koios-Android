@@ -1,5 +1,6 @@
 package org.mlab.research.koios.ui.survey;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,6 +10,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -31,12 +33,15 @@ import org.mlab.research.koios.ui.formmaster.model.FormElementPickerSingle;
 import org.mlab.research.koios.ui.formmaster.model.FormElementTextMultiLine;
 import org.mlab.research.koios.ui.formmaster.model.FormElementTextSingleLine;
 import org.mlab.research.koios.ui.formmaster.model.FormHeader;
+import org.mlab.research.koios.ui.formmaster.viewholder.FormAudioRecorderActivity;
+import org.mlab.research.koios.ui.formmaster.viewholder.RecordingRequestListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
-public class SurveyDetailsActivity extends AppCompatActivity {
+public class SurveyDetailsActivity extends AppCompatActivity implements RecordingRequestListener {
 
     private static final String TAG = SurveyDetailsActivity.class.getSimpleName() + "_debug";
 
@@ -117,10 +122,11 @@ public class SurveyDetailsActivity extends AppCompatActivity {
             surveyResponse.setVersion(task.getVersion());
             if (task.getType().equalsIgnoreCase("recording")){
                 surveyResponse.setAnswerType("object");
+                surveyResponse.setObjectUrl(formElement.getValue());
             }else{
                 surveyResponse.setAnswerType("value");
+                surveyResponse.setAnswer(formElement.getValue());
             }
-            surveyResponse.setAnswer(formElement.getValue());
             surveyResponse.setSubmissionTime(System.currentTimeMillis()+"");
             if (task.getHasComment() == 1) {
                 BaseFormElement commentElement = formBuilder.getFormElement(-task.getTaskId());
@@ -141,7 +147,13 @@ public class SurveyDetailsActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(Call<CimonResponse> call, Response<CimonResponse> response) {
                         if (response.body().getCode()==0){
-                            showDialog("Submission Successful", "Thank you for your participation to the survey.");
+                            //showDialog("Submission Successful", "Thank you for your participation to the survey.");
+                            //update survey response time
+                            String key = "survey-" + surveyId + "-lastresponse";
+                            String value = Util.getCurrentTimeUptoSecond();
+                            Util.saveDataToSharedPref(key, value);
+                            setResult(Util.SURVEY_SUBMIT_SUCCESS);
+                            finish();
                         }else {
                             showDialog("Submission Failure", "Please try later!");
                         }
@@ -209,7 +221,8 @@ public class SurveyDetailsActivity extends AppCompatActivity {
 
     private void setupForm() {
         formRecyclerView = (RecyclerView) findViewById(R.id.surveyFormRecyclerView);
-        formBuilder = new FormBuilder(this, formRecyclerView);
+        formBuilder = new FormBuilder(this, formRecyclerView, this);
+
 
         List<BaseFormElement> formItems = new ArrayList<>();
         for (StudySurveyTask task : taskList) {
@@ -265,5 +278,50 @@ public class SurveyDetailsActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void processRecordingRequest(int elementTag) {
+        Log.d(TAG, "process recording request");
+        Intent intent = new Intent(this, FormAudioRecorderActivity.class);
+        intent.putExtra("study_id", studyId);
+        intent.putExtra("survey_id", surveyId);
+        intent.putExtra("task_id", elementTag);
+        startActivityForResult(intent, Util.RECORDING_UPLOAD_REQUEST);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Util.RECORDING_UPLOAD_REQUEST && resultCode == Util.RECORDING_UPLOAD_SUCCESS){
+            try {
+                int tag = data.getIntExtra("task_id", 0);
+                String filePath = data.getStringExtra("file_path");
+                Log.d(TAG, "tag:"+ tag + ", file path:"+ filePath);
+                BaseFormElement formElement = formBuilder.getFormElement(tag);
+                formElement.setValue(filePath);
+                formElement.setTitle("You have answered");
+                showRecordingUploadStatus("Success", "Please continue to the next question");
+
+            }catch (Exception e){
+
+            }
+
+        }else if(requestCode == Util.RECORDING_UPLOAD_REQUEST && resultCode == Util.RECORDING_UPLOAD_FAILURE){
+            showRecordingUploadStatus("Error", "Service not available, please try later.");
+        }
+    }
+
+    private void showRecordingUploadStatus(String title, String message){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(title);
+        builder.setMessage(message);
+        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
 }
 

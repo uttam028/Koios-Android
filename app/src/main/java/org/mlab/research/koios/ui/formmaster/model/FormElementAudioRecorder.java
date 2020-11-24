@@ -33,4 +33,5 @@ public class FormElementAudioRecorder extends BaseFormElement {
     public FormElementAudioRecorder setRequired(boolean required) {
         return (FormElementAudioRecorder)  super.setRequired(required);
     }
+
 }

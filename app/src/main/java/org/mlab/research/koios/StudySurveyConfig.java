@@ -42,6 +42,7 @@ public class StudySurveyConfig {
     private String schedule;
     private int lifecycle;
 
+
     public int getId() {
         return id;
     }

@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import org.mlab.research.koios.ui.formmaster.adapter.FormAdapter;
 import org.mlab.research.koios.ui.formmaster.listener.OnFormElementValueChangedListener;
 import org.mlab.research.koios.ui.formmaster.model.BaseFormElement;
+import org.mlab.research.koios.ui.formmaster.viewholder.RecordingRequestListener;
 
 import java.util.List;
 
@@ -27,7 +28,7 @@ public class FormBuilder {
      * @param recyclerView
      */
     public FormBuilder(Context context, RecyclerView recyclerView) {
-        initializeFormBuildHelper(context, recyclerView, null);
+        initializeFormBuildHelper(context, recyclerView, null, null);
     }
 
     /**
@@ -36,8 +37,13 @@ public class FormBuilder {
      * @param recyclerView
      */
     public FormBuilder(Context context, RecyclerView recyclerView, OnFormElementValueChangedListener listener) {
-        initializeFormBuildHelper(context, recyclerView, listener);
+        initializeFormBuildHelper(context, recyclerView, listener, null);
     }
+
+    public FormBuilder(Context context, RecyclerView recyclerView, RecordingRequestListener recordinglistener) {
+        initializeFormBuildHelper(context, recyclerView, null, recordinglistener);
+    }
+
 
     /**
      * private method for initializing form build helper
@@ -45,10 +51,10 @@ public class FormBuilder {
      * @param recyclerView
      * @param listener
      */
-    private void initializeFormBuildHelper(Context context, RecyclerView recyclerView, OnFormElementValueChangedListener listener) {
+    private void initializeFormBuildHelper(Context context, RecyclerView recyclerView, OnFormElementValueChangedListener listener, RecordingRequestListener recordingRequestListener) {
 
         // initialize form adapter
-        this.mFormAdapter = new FormAdapter(context, listener);
+        this.mFormAdapter = new FormAdapter(context, listener, recordingRequestListener);
 
         // set up the recyclerview with adapter
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);

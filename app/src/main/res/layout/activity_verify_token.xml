@@ -31,6 +31,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:text="Button"
+        android:textColor="@color/colorWhite"
         android:background="@color/colorNdBlue"
         android:textSize="20sp"
         android:onClick="verifyAction"

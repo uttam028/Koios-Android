@@ -35,7 +35,7 @@
     >
 
     <TextView
-        android:id="@+id/studyName"
+        android:id="@+id/openStudyName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:maxLines="2"
@@ -49,7 +49,7 @@
         android:id="@+id/joinDate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/studyName"
+        app:layout_constraintTop_toBottomOf="@id/openStudyName"
         android:maxLines="1"
         android:textSize="15sp"
         android:text="Joined on 11-1-2020"

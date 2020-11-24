@@ -6,115 +6,112 @@
     android:layout_height="match_parent"
     tools:context=".ui.study.StudyDetailsActivity">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/studyFormRecyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="5dp"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp" />
-
     <ImageView
         android:id="@+id/studyLogo"
         android:layout_width="134dp"
         android:layout_height="143dp"
-        android:layout_marginStart="24dp"
         android:paddingTop="5dp"
         android:scaleType="fitXY"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/appstore"
-        tools:layout_editor_absoluteY="0dp" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/task" />
 
     <TextView
-        android:id="@+id/studyName"
+        android:id="@+id/openStudyName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="28dp"
         android:text="Study Name"
+        android:textColor="@color/colorNdBlue"
+        android:textSize="18sp"
         android:textStyle="bold"
-        android:textColor = "#041c3c"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/studyLogo"
         app:layout_constraintTop_toTopOf="@+id/studyLogo" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/textViewOrganization"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
         android:layout_marginTop="24dp"
         android:text="University of Notre Dame"
-        android:textColor = "#041c3c"
+        android:textColor = "@color/colorNdBlue"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.452"
         app:layout_constraintStart_toEndOf="@+id/studyLogo"
-        app:layout_constraintTop_toBottomOf="@+id/studyName" />
+        app:layout_constraintTop_toBottomOf="@+id/openStudyName" />
 
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/labelDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="60dp"
-        android:background="#E6E6E6"
+        android:layout_marginTop="32dp"
         android:text="Description"
+        android:textSize="16sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/studyLogo" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/labelInstruction"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="92dp"
-        android:background="#E6E6E6"
+        android:textSize="16sp"
+        android:textStyle="bold"
         android:text="Instructions"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        app:layout_constraintTop_toBottomOf="@+id/labelDescription" />
 
     <TextView
-        android:id="@+id/textView6"
+        android:id="@+id/labelAdditional"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="100dp"
-        android:background="#E6E6E6"
+        android:textSize="16sp"
+        android:textStyle="bold"
         android:text="Additional Information"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.088"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+        app:layout_constraintTop_toBottomOf="@+id/labelInstruction" />
 
     <TextView
         android:id="@+id/descriptionTextView"
-        android:layout_width="368dp"
+        android:layout_width="match_parent"
         android:layout_height="45dp"
         android:layout_marginTop="4dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="8dp"
         android:text="No Description"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        app:layout_constraintTop_toBottomOf="@+id/labelDescription" />
 
     <TextView
         android:id="@+id/instructionsTextView"
-        android:layout_width="370dp"
+        android:layout_width="match_parent"
         android:layout_height="42dp"
         android:layout_marginTop="8dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="8dp"
         android:text="No Instructions"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.609"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+        app:layout_constraintTop_toBottomOf="@+id/labelInstruction" />
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="379dp"
         android:layout_height="2dp"
-        android:layout_marginTop="16dp"
         android:scaleType="fitXY"
-        app:layout_constraintBottom_toTopOf="@+id/textView2"
+        app:layout_constraintBottom_toTopOf="@+id/labelDescription"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/studyLogo"

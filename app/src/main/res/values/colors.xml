@@ -8,6 +8,8 @@
     <color name="colorWhite">#ffffff</color>
     <color name="colorOverdue">#28B30071</color>
     <color name="colorWarning">#27FFEB3B</color>
+    <color name="colorError">#F44336</color>
+    <color name="colorBlack">#000000</color>
 
 
     <!--color for weekview library-->

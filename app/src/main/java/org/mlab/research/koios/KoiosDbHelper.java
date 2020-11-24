@@ -12,8 +12,8 @@ import java.util.ArrayList;
 public class KoiosDbHelper extends SQLiteOpenHelper {
 
     private static final String TAG = KoiosDbHelper.class.getSimpleName() + "_debug";
-    private static final String DATABASE_NAME = "KoiosDoD";
-    private static final int DATABASE_VERSION = 1;
+    private static final String DATABASE_NAME = "Koios";
+    private static final int DATABASE_VERSION = 2;
 
     //Study Table-----------------------------------------------------------------------------------
     private static final String TABLE_STUDY = "study";
@@ -21,16 +21,18 @@ public class KoiosDbHelper extends SQLiteOpenHelper {
     //Study Table - Column Names
     private static final String COLUMN_STUDY_ID = "study_id";
     private static final String COLUMN_STUDY_NAME = "name";
+    private static final String COLUMN_STUDY_ORGANIZATION = "organization";
     private static final String COLUMN_STUDY_DESCRIPTION = "description";
     private static final String COLUMN_STUDY_MODIFICATION_TIME = "modification_time";
     private static final String COLUMN_STUDY_STATE = "state";
+    private static final String COLUMN_STUDY_TYPE = "study_type";
     private static final String COLUMN_STUDY_INSTRUCTION = "instruction";
     private static final String COLUMN_STUDY_ICON_URL = "icon_url";
 
     //Study Table - Create Entry
     private static final String CREATE_TABLE_STUDY = "create table " + TABLE_STUDY
-            + "("+ COLUMN_STUDY_ID +" integer primary key, "+ COLUMN_STUDY_NAME + " text, " + COLUMN_STUDY_DESCRIPTION + " text,"
-            + COLUMN_STUDY_MODIFICATION_TIME + " text not null, "+ COLUMN_STUDY_STATE +" integer default 0, "+ COLUMN_STUDY_INSTRUCTION
+            + "("+ COLUMN_STUDY_ID +" integer primary key, "+ COLUMN_STUDY_NAME + " text, " + COLUMN_STUDY_ORGANIZATION + " text, " + COLUMN_STUDY_DESCRIPTION + " text,"
+            + COLUMN_STUDY_MODIFICATION_TIME + " text not null, "+ COLUMN_STUDY_STATE +" integer default 0, "+ COLUMN_STUDY_TYPE +" integer default 1, "+ COLUMN_STUDY_INSTRUCTION
             +" text, "+ COLUMN_STUDY_ICON_URL +" text)";
 
     //Study Table - Delete Entry
@@ -246,13 +248,16 @@ public class KoiosDbHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(COLUMN_STUDY_ID, study.getId());
         values.put(COLUMN_STUDY_NAME, study.getName());
+        values.put(COLUMN_STUDY_ORGANIZATION, study.getOrganization());
         values.put(COLUMN_STUDY_DESCRIPTION, study.getDescription());
         values.put(COLUMN_STUDY_MODIFICATION_TIME, study.getModificationTime());
         values.put(COLUMN_STUDY_STATE, study.getState());
+        values.put(COLUMN_STUDY_TYPE, study.getStudyType());
         values.put(COLUMN_STUDY_INSTRUCTION, study.getInstruction());
         values.put(COLUMN_STUDY_ICON_URL, study.getIconUrl());
 
         db.insertWithOnConflict(TABLE_STUDY, null, values, SQLiteDatabase.CONFLICT_REPLACE);
+        Koios.getStudyEnrolled().postValue(true);
     }
 
 
@@ -266,12 +271,16 @@ public class KoiosDbHelper extends SQLiteOpenHelper {
             study.setId(studyId);
             String name = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_STUDY_NAME));
             study.setName(name);
+            String organization = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_STUDY_ORGANIZATION));
+            study.setOrganization(organization);
             String description = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_STUDY_DESCRIPTION));
             study.setDescription(description);
             String modificationTime = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_STUDY_MODIFICATION_TIME));
             study.setModificationTime(modificationTime);
             int state = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_STUDY_STATE));
             study.setState(state);
+            int type = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_STUDY_TYPE));
+            study.setState(type);
             String instruction = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_STUDY_INSTRUCTION));
             study.setInstruction(instruction);
             String iconUrl = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_STUDY_ICON_URL));
@@ -292,12 +301,16 @@ public class KoiosDbHelper extends SQLiteOpenHelper {
             study.setId(studyId);
             String name = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_STUDY_NAME));
             study.setName(name);
+            String organization = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_STUDY_ORGANIZATION));
+            study.setOrganization(organization);
             String description = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_STUDY_DESCRIPTION));
             study.setDescription(description);
             String modificationTime = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_STUDY_MODIFICATION_TIME));
             study.setModificationTime(modificationTime);
             int state = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_STUDY_STATE));
             study.setState(state);
+            int type = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_STUDY_TYPE));
+            study.setState(type);
             String instruction = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_STUDY_INSTRUCTION));
             study.setInstruction(instruction);
             String iconUrl = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_STUDY_ICON_URL));
@@ -682,6 +695,7 @@ public class KoiosDbHelper extends SQLiteOpenHelper {
         values.put(COLUMN_SURVEY_CONFIG_LIFECYCLE, config.getLifecycle());
 
         db.insertWithOnConflict(TABLE_SURVEY_CONFIG, null, values, SQLiteDatabase.CONFLICT_REPLACE);
+        Koios.getSurveyListChanged().postValue(true);
     }
 
     public ArrayList<StudySurveyConfig> getAllSurveys(){
@@ -696,6 +710,7 @@ public class KoiosDbHelper extends SQLiteOpenHelper {
         if (studyId > 0){
             query += ( " where " + COLUMN_SURVEY_CONFIG_STUDY_ID + " = " + studyId);
         }
+        Log.d(TAG, "query:" + query);
         Cursor cursor = db.rawQuery(query, null);
         while (cursor.moveToNext()) {
             StudySurveyConfig config = new StudySurveyConfig();
@@ -738,6 +753,7 @@ public class KoiosDbHelper extends SQLiteOpenHelper {
 
         }
         cursor.close();
+
         return configs;
 
     }
@@ -752,10 +768,17 @@ public class KoiosDbHelper extends SQLiteOpenHelper {
 
     public int deleteSurveyConfig(int configId){
         SQLiteDatabase db = this.getWritableDatabase();
-        String selection = COLUMN_SURVEY_CONFIG_STUDY_ID + " = ?";
+        String selection = COLUMN_SURVEY_CONFIG_ID + " = ?";
         String [] selectionArgs = {String.valueOf(configId)};
+        Log.d(TAG, "delete survey config, selection:"+ selection + ", for id:" + configId);
         int deletedRows = db.delete(TABLE_SURVEY_CONFIG, selection, selectionArgs);
+        Log.d(TAG, "number of rows deleted:" + deletedRows);
+        if (deletedRows>0){
+            Koios.getSurveyListChanged().postValue(true);
+        }
         return deletedRows;
+//        SQLiteDatabase db = this.getWritableDatabase();
+//        String query = "delete from " + TABLE_SURVEY_CONFIG + "where "
     }
 
 

@@ -38,37 +38,37 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_home, R.id.navigation_survey, R.id.navigation_study, R.id.navigation_profile)
+                R.id.navigation_survey, R.id.navigation_study, R.id.navigation_profile)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
 
 
-        if (ActivityCompat.checkSelfPermission(Koios.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(Koios.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-            //start location service
-            startLocationService();
-
-        }else {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 100);
-        }
+//        if (ActivityCompat.checkSelfPermission(Koios.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+//                && ActivityCompat.checkSelfPermission(Koios.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+//            //start location service
+//            startLocationService();
+//
+//        }else {
+//            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 100);
+//        }
     }
 
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == 100){
-            if (grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                //start location service
-                startLocationService();
-            }
-        }
-    }
-
-    private void startLocationService(){
-//        Intent intent = new Intent(Koios.getContext(), LocationDataCollectionService.class);
-//        ContextCompat.startForegroundService(Koios.getContext(), intent);
-    }
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+//        if (requestCode == 100){
+//            if (grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+//                //start location service
+//                startLocationService();
+//            }
+//        }
+//    }
+//
+//    private void startLocationService(){
+////        Intent intent = new Intent(Koios.getContext(), LocationDataCollectionService.class);
+////        ContextCompat.startForegroundService(Koios.getContext(), intent);
+//    }
 }

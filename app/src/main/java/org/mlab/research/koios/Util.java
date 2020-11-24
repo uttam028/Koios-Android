@@ -2,6 +2,7 @@ package org.mlab.research.koios;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
@@ -21,6 +22,7 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -29,7 +31,24 @@ import retrofit2.Response;
 public class Util {
 
     private static final String TAG = Util.class.getSimpleName() + "_debug";
-    private static SharedPreferences encryptedSharedPref;
+
+    public static final int ENROLL_REQUEST_CODE=100;
+    public static final int STUDY_ENROLLMENT_SUCCESS = 101;
+    public static final int STUDY_ENROLLMENT_FAILURE = -101;
+
+    public static final int LEAVE_REQUEST_CODE = 102;
+    public static final int STUDY_LEAVE_SUCCESS = 103;
+    public static final int STUDY_LEAVE_FAILURE = -103;
+
+    public static final int SURVEY_SUBMIT_REQUEST = 104;
+    public static final int SURVEY_SUBMIT_SUCCESS = 105;
+    public static final int SURVEY_SUBMIT_FAILURE = -105;
+
+    public static final int RECORDING_UPLOAD_REQUEST = 106;
+    public static final int RECORDING_UPLOAD_SUCCESS = 107;
+    public static final int RECORDING_UPLOAD_FAILURE = -107;
+
+    public static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
 
 
     static String baseUrl() {
@@ -38,7 +57,7 @@ public class Util {
     }
 
 
-    static void saveDataToSharedPref(String key, String value) {
+    public static void saveDataToSharedPref(String key, String value) {
         //PreferenceManager.getDefaultSharedPreferences()
         Context context = Koios.getContext();
         SharedPreferences prefs = context.getSharedPreferences(context.getString(R.string.sharedPrefFileName), Context.MODE_PRIVATE);
@@ -304,7 +323,57 @@ public class Util {
         return localTime;
     }
 
+    public static int getDayDifference(String givenDate){
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date given = sdf.parse(givenDate);
+//            Date current = sdf.parse()
+//            String currentTime = sdf.format(new Date());
+            long difference = new Date().getTime() - given.getTime();
+            long differenceInDays = TimeUnit.MILLISECONDS.toDays(difference);
+            return (int)differenceInDays;
+        }catch (Exception e){
+
+        }
+        return -100;
+    }
+
+    public static boolean isValidDate(String givenDate){
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date given = sdf.parse(givenDate);
+            return true;
+        }catch (Exception e){
+
+        }
+        return false;
+    }
+
+    public static int handleSpecialCase(int surveyId){
+        if (surveyId==22){
+            String followupKey = "survey-22-lastresponse";
+            String eventKey = "survey-23-lastresponse";
+            String lastResponseOfFollowUp = getPreferenceData(followupKey);
+            String lastResponseOfEvent = getPreferenceData(eventKey);
+            try {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                Date eventDate = sdf.parse(lastResponseOfEvent);
+                Date followupDate = sdf.parse(lastResponseOfFollowUp);
+
+                int differenceInDaysEventSurvey = getDayDifference(lastResponseOfEvent);
+                if (differenceInDaysEventSurvey > 0 && differenceInDaysEventSurvey < 3 && (eventDate.compareTo(followupDate))>=0){
+                    return R.color.colorError;
+                }
+
+            }catch (Exception e){
+
+            }
+        }
+        return R.color.colorNdBlue;
+    }
+
     private static String getSensorConfig(){
+
 //        CoreSensorAction accelAction = Prosthesis.getDbHelper().getCoreSensorAction("accel");
 //        CoreSensorAction gyroAction = Prosthesis.getDbHelper().getCoreSensorAction("gyro");
 //        CoreSensorAction pressureAction = Prosthesis.getDbHelper().getCoreSensorAction("pressure");

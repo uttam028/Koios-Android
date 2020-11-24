@@ -41,14 +41,18 @@ public class FormElementTextSingleLineViewHolder extends BaseViewHolder {
         mTextViewTitle.setText(formElement.getTitle());
         mEditTextValue.setText(formElement.getValue());
         mEditTextValue.setHint(formElement.getHint());
-        itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mEditTextValue.requestFocus();
-                InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.showSoftInput(mEditTextValue, InputMethodManager.SHOW_IMPLICIT);
-            }
-        });
+        if (formElement.isEnabled()){
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mEditTextValue.requestFocus();
+                    InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.showSoftInput(mEditTextValue, InputMethodManager.SHOW_IMPLICIT);
+                }
+            });
+        }else {
+            mEditTextValue.setEnabled(false);
+        }
     }
 }
 

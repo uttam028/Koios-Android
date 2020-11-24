@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 
 import org.mlab.research.koios.R;
+import org.mlab.research.koios.ui.formmaster.listener.ExternalActivityRequestListener;
 import org.mlab.research.koios.ui.formmaster.model.BaseFormElement;
 import org.mlab.research.koios.ui.survey.SurveyDetailsActivity;
 
@@ -17,6 +18,7 @@ public class FormElementAudioRecorderViewHolder extends BaseViewHolder {
 
     public AppCompatTextView mTextViewTitle;
     public AppCompatEditText mEditTextValue;
+    public ExternalActivityRequestListener activityRequestListener;
 //    public FormItemEditTextListener mFormCustomEditTextListener;
 
 //    public FormElementButtonViewHolder(View v, FormItemEditTextListener listener) {
@@ -27,10 +29,11 @@ public class FormElementAudioRecorderViewHolder extends BaseViewHolder {
 //        mEditTextValue.addTextChangedListener(mFormCustomEditTextListener);
 //        mEditTextValue.setMaxLines(1);
 //    }
-    public FormElementAudioRecorderViewHolder(View v) {
+    public FormElementAudioRecorderViewHolder(View v, ExternalActivityRequestListener activityRequestListener) {
         super(v);
         mTextViewTitle = (AppCompatTextView) v.findViewById(R.id.formElementTitle);
         mEditTextValue = (AppCompatEditText) v.findViewById(R.id.formElementValue);
+        this.activityRequestListener = activityRequestListener;
     }
 
 //    @Override
@@ -47,9 +50,13 @@ public class FormElementAudioRecorderViewHolder extends BaseViewHolder {
         mTextViewTitle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(itemView.getContext(), FormAudioRecorderActivity.class);
-                itemView.getContext().startActivity(intent);
+//                Intent intent = new Intent(itemView.getContext(), FormAudioRecorderActivity.class);
+//                itemView.getContext().startActivity(intent);
+                activityRequestListener.processExternalActivityRequest(formElement.getTag());
+
             }
         });
+
+
     }
 }

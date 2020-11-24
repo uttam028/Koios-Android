@@ -29,6 +29,7 @@ public class BaseFormElement {
     private String mValue; // value to be shown on right
     private String mHint; // value to be shown if mValue is null
     private boolean mRequired; // value to set is the field is required
+    private boolean enabled=true;
 
     // setters
     public BaseFormElement setTag(int mTag) {
@@ -61,6 +62,11 @@ public class BaseFormElement {
         return this;
     }
 
+    public BaseFormElement setEnabled(boolean enabled) {
+        this.enabled = enabled;
+        return this;
+    }
+
     // getters
     public int getTag() {
         return this.mTag;
@@ -84,6 +90,10 @@ public class BaseFormElement {
 
     public boolean isRequired() {
         return this.mRequired;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
     }
 
     @Override
