@@ -189,11 +189,11 @@ public class OpenStudiesFragment extends Fragment implements ItemClickListener {
 
                 @Override
                 public void onFailure(Call<ArrayList<KoiosStudy>> call, Throwable t) {
-
+                    progress.dismiss();
                 }
             });
         } catch (Exception e) {
-
+            progress.dismiss();
         }
     }
 

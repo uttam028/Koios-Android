@@ -36,13 +36,16 @@ import org.mlab.research.koios.Koios;
 import org.mlab.research.koios.R;
 import org.mlab.research.koios.Util;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class FormAudioRecorderActivity extends AppCompatActivity {
 
     private static final String TAG = FormAudioRecorderActivity.class.getSimpleName() + "_debug";
 
+    private static final String AUDIO_RECORDING_DIRECTORY = "/data/data/org.mlab.research.koios/files/";
     private static String fileName = null;
 
     private ImageButton ibuttonReccorder;
@@ -77,8 +80,21 @@ public class FormAudioRecorderActivity extends AppCompatActivity {
         setupToolBar();
 
         // Record to the external cache directory for visibility
-        fileName = getExternalCacheDir().getAbsolutePath();
-        fileName += "/recording.m4a";
+        fileName = AUDIO_RECORDING_DIRECTORY + "/recording.m4a";
+        try {
+            //fileOutputStream = context.openFileOutput(filePath, Context.MODE_APPEND);
+            File directory = new File(AUDIO_RECORDING_DIRECTORY);
+            if (!directory.exists()){
+                directory.mkdirs();
+            }
+//            File file = new File(filePath);
+//            if (!file.exists()){
+//                file.createNewFile();
+//            }
+        }catch (Exception e){
+            Log.d(TAG, "exception in stream initialize:" + e.getLocalizedMessage());
+        }
+
 
         Log.d(TAG, "file name:"+ fileName);
 
