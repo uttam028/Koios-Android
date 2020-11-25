@@ -49,11 +49,18 @@ public class SurveyOverviewAdapter extends RecyclerView.Adapter<SurveyOverviewHo
             }else if(daysDifference ==1){
                 lastResponseText = "Completed Yesterday";
             }else if(daysDifference>1){
-                lastResponseText = "Completed " + daysDifference + " days ago";
+                lastResponseText = "Completed " + survey.getLastParticipation();
             }
 
             if (survey.getSchedule().startsWith("always")){
-                int color = Util.handleSpecialCase(survey.getSurveyId());
+
+                int color = R.color.colorError; // make default red for other studies
+
+                // ensure study is FIRST RESPONDER EMOTION STUDY
+                if (survey.getStudyId() == 37) {
+                    color = Util.handleSpecialCase(survey.getSurveyId());
+                }
+
                 holder.tvLastParticipation.setTextColor(ContextCompat.getColor(context, color));
             }else if (survey.getSchedule().startsWith("week")){
                 if (daysDifference>=7){
@@ -67,7 +74,15 @@ public class SurveyOverviewAdapter extends RecyclerView.Adapter<SurveyOverviewHo
         }else{
             lastResponseText = "Not Completed Yet";
             holder.tvLastParticipation.setTextColor(ContextCompat.getColor(context, R.color.colorError));
+
+            // FOR FIRST RESPONDER EMOTION STUDY ONLY
+            if(survey.getStudyId() == 37 && (survey.getSurveyId() == 22 || survey.getSurveyId() == 23))
+            {
+                holder.tvLastParticipation.setTextColor(ContextCompat.getColor(context, R.color.colorBlack));
+            }
+            // FOR FIRST RESPONDER EMOTION STUDY ONLY
         }
+
         holder.tvLastParticipation.setText(lastResponseText);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
