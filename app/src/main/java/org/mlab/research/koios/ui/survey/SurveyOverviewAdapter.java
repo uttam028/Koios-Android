@@ -53,14 +53,7 @@ public class SurveyOverviewAdapter extends RecyclerView.Adapter<SurveyOverviewHo
             }
 
             if (survey.getSchedule().startsWith("always")){
-
-                int color = R.color.colorError; // make default red for other studies
-
-                // ensure study is FIRST RESPONDER EMOTION STUDY
-                if (survey.getStudyId() == 37) {
-                    color = Util.handleSpecialCase(survey.getSurveyId());
-                }
-
+                int color = Util.handleSpecialCase(survey.getSurveyId());
                 holder.tvLastParticipation.setTextColor(ContextCompat.getColor(context, color));
             }else if (survey.getSchedule().startsWith("week")){
                 if (daysDifference>=7){
@@ -73,14 +66,8 @@ public class SurveyOverviewAdapter extends RecyclerView.Adapter<SurveyOverviewHo
             }
         }else{
             lastResponseText = "Not Completed Yet";
-            holder.tvLastParticipation.setTextColor(ContextCompat.getColor(context, R.color.colorError));
-
-            // FOR FIRST RESPONDER EMOTION STUDY ONLY
-            if(survey.getStudyId() == 37 && (survey.getSurveyId() == 22 || survey.getSurveyId() == 23))
-            {
-                holder.tvLastParticipation.setTextColor(ContextCompat.getColor(context, R.color.colorBlack));
-            }
-            // FOR FIRST RESPONDER EMOTION STUDY ONLY
+            //the color scheme from first responder study
+            holder.tvLastParticipation.setTextColor(ContextCompat.getColor(context, R.color.colorNdBlue));
         }
 
         holder.tvLastParticipation.setText(lastResponseText);
