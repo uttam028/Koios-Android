@@ -98,9 +98,26 @@ public class SurveyDetailsActivity extends AppCompatActivity implements Recordin
         //Toast.makeText(getApplicationContext(),"menu "+ item.getItemId() + "," + mRecyclerView.getChildCount(),Toast.LENGTH_SHORT).show();
         switch (item.getItemId()) {
             case R.id.survey_submit:
-                if (validateForm()) {
-                    uploadData();
-                }
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("Are you sure?");
+                builder.setMessage("Do you want to submit the survey");
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (validateForm()) {
+                            uploadData();
+                        }
+                    }
+                });
+
+                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                AlertDialog alert = builder.create();
+                alert.show();
+
                 return true;
             default:
                 onBackPressed();

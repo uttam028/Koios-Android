@@ -125,15 +125,15 @@ public class StudyDetailsActivity extends AppCompatActivity {
 
     private void revalidateEnrollAction(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Do you like to join?");
-//        builder.setMessage(message);
+        builder.setTitle("Are you sure?");
+        builder.setMessage("Do you want to join the study?");
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 enrollToStudy();
             }
         });
 
-        builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
