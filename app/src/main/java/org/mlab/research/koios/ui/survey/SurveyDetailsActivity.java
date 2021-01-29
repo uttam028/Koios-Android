@@ -19,7 +19,6 @@ import android.view.MenuItem;
 
 import org.mlab.research.koios.CimonResponse;
 import org.mlab.research.koios.Koios;
-import org.mlab.research.koios.KoiosStudy;
 import org.mlab.research.koios.R;
 import org.mlab.research.koios.StudySurveyTask;
 import org.mlab.research.koios.Util;
@@ -31,15 +30,21 @@ import org.mlab.research.koios.ui.formmaster.model.FormElementPickerDate;
 import org.mlab.research.koios.ui.formmaster.model.FormElementPickerMulti;
 import org.mlab.research.koios.ui.formmaster.model.FormElementPickerSingle;
 import org.mlab.research.koios.ui.formmaster.model.FormElementTextMultiLine;
+import org.mlab.research.koios.ui.formmaster.model.FormElementTextNumber;
 import org.mlab.research.koios.ui.formmaster.model.FormElementTextSingleLine;
+import org.mlab.research.koios.ui.formmaster.model.FormElementLikertScale;
 import org.mlab.research.koios.ui.formmaster.model.FormHeader;
 import org.mlab.research.koios.ui.formmaster.viewholder.FormAudioRecorderActivity;
+import org.mlab.research.koios.ui.formmaster.viewholder.FormElementLikertScaleViewHolder;
 import org.mlab.research.koios.ui.formmaster.viewholder.RecordingRequestListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class SurveyDetailsActivity extends AppCompatActivity implements RecordingRequestListener {
 
@@ -66,6 +71,7 @@ public class SurveyDetailsActivity extends AppCompatActivity implements Recordin
         setupToolBar();
 
         setupForm();
+
     }
 
     private void setupToolBar() {
@@ -170,6 +176,82 @@ public class SurveyDetailsActivity extends AppCompatActivity implements Recordin
                             String value = Util.getCurrentTimeUptoSecond();
                             Util.saveDataToSharedPref(key, value);
                             setResult(Util.SURVEY_SUBMIT_SUCCESS);
+
+
+                            if (surveyId == 22)
+                            {
+                                String key2 = "survey-" + 23 + "-last3responses";
+                                Set<String> last3participations = Util.getPreferenceDataLast3Resp(key2);
+
+
+                                // remove oldest participation ONLY
+                                String oldestTimeString = value;
+                                for (String timeString : last3participations) {
+                                    Log.d("time", timeString);
+
+                                    try {
+                                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                                        Date time = sdf.parse(timeString);
+                                        Date oldestTime = sdf.parse(oldestTimeString);
+
+                                        if ((oldestTime.compareTo(time)) >= 0) {
+                                            oldestTimeString = timeString;
+                                        }
+
+                                    } catch (Exception e) {
+
+                                    }
+
+                                }
+                                last3participations.remove(oldestTimeString);
+                                Util.saveDataToSharedPrefLast3Resp(key2, last3participations);
+                            }
+
+                            if (surveyId == 23) {
+                                // update last 3 survey response time
+                                String key2 = "survey-" + surveyId + "-last3responses";
+                                Set<String> last3participations = Util.getPreferenceDataLast3Resp(key2);
+
+                                if (last3participations == null) {
+                                    last3participations = new HashSet<String>();
+                                    last3participations.add(value);
+                                    Log.d("test", "first value");
+
+                                } else if (last3participations.size() == 3) {
+
+                                    // remove oldest participation and add in new participation
+                                    String oldestTimeString = value;
+                                    for (String timeString : last3participations) {
+                                        Log.d("time", timeString);
+
+                                        try {
+                                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                                            Date time = sdf.parse(timeString);
+                                            Date oldestTime = sdf.parse(oldestTimeString);
+
+                                            if ((oldestTime.compareTo(time)) >= 0) {
+                                                oldestTimeString = timeString;
+                                            }
+
+
+                                        } catch (Exception e) {
+
+                                        }
+
+                                    }
+                                    last3participations.remove(oldestTimeString);
+                                    last3participations.add(value);
+                                    Log.d("test", "replaced value");
+
+                                } else {
+                                    // add current time to set
+                                    last3participations.add(value);
+                                    Log.d("test", "added value");
+                                }
+                                Util.saveDataToSharedPrefLast3Resp(key2, last3participations);
+                            }
+                            Util.saveDataToSharedPref(key, value);
+                            setResult(Util.SURVEY_SUBMIT_SUCCESS);
                             finish();
                         }else {
                             showDialog("Submission Failure", "Please try later!");
@@ -210,6 +292,14 @@ public class SurveyDetailsActivity extends AppCompatActivity implements Recordin
                         showDialog("Response Verification", "Answer required for question " + task.getTaskId());
                         break;
                     }
+                    else if (task.getType().equalsIgnoreCase("selection")){
+                        Integer value = Integer.parseInt(formElement.getValue());
+                        if(value > 10 || value < 1){
+                            valid = false;
+                            showDialog("Response Verification", "Invalid number for question " + task.getTaskId());
+                            break;
+                        }
+                    }
                 }
             }
         }
@@ -238,7 +328,7 @@ public class SurveyDetailsActivity extends AppCompatActivity implements Recordin
 
     private void setupForm() {
         formRecyclerView = (RecyclerView) findViewById(R.id.surveyFormRecyclerView);
-        formBuilder = new FormBuilder(this, formRecyclerView, this);
+        formBuilder = new FormBuilder(this, formRecyclerView);
 
 
         List<BaseFormElement> formItems = new ArrayList<>();
@@ -273,6 +363,25 @@ public class SurveyDetailsActivity extends AppCompatActivity implements Recordin
                     formItems.add(element);
                 } else if (task.getType().equalsIgnoreCase("recording")) {
                     element = FormElementAudioRecorder.createInstance().setTitle("Click to Start");
+                    formItems.add(element);
+                }else if (task.getType().equalsIgnoreCase("rating")){
+                    element = FormElementTextNumber.createInstance().setTitle("Click here to rate 1 to 10");
+                    formItems.add(element);
+                } else if (task.getType().equalsIgnoreCase("numeric")){
+                    element = FormElementTextNumber.createInstance().setTitle("Click here to answer");
+                    formItems.add(element);
+                } else if (task.getType().toLowerCase().contains("likert")){
+                    String[] inputs = task.getPossibleInput().split("[|]");
+                    if (task.getType().toLowerCase().contains("4"))
+                    {
+                        element = FormElementLikertScale.createInstance().setTitle("Select Answer").setPickerTitle("Pick any item").setLikertType(4).setUseLegend(task.getType().toLowerCase().contains("legend")).setUseCustomOptions(!task.getType().toLowerCase().contains("preset")).setOptions(Arrays.asList(inputs));
+                    }
+                    else if (task.getType().toLowerCase().contains("5")){
+                        element = FormElementLikertScale.createInstance().setTitle("Select Answer").setPickerTitle("Pick any item").setLikertType(5).setUseLegend(task.getType().toLowerCase().contains("legend")).setUseCustomOptions(!task.getType().toLowerCase().contains("preset")).setOptions(Arrays.asList(inputs));
+                    }
+                    else if (task.getType().toLowerCase().contains("7")){
+                        element = FormElementLikertScale.createInstance().setTitle("Select Answer").setPickerTitle("Pick any item").setLikertType(7).setUseLegend(task.getType().toLowerCase().contains("legend")).setUseCustomOptions(!task.getType().toLowerCase().contains("preset")).setOptions(Arrays.asList(inputs));
+                    }
                     formItems.add(element);
                 }
                 if (element != null) {

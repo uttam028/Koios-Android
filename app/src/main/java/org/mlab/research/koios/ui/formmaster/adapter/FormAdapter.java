@@ -16,6 +16,7 @@ import org.mlab.research.koios.ui.formmaster.viewholder.BaseViewHolder;
 import org.mlab.research.koios.ui.formmaster.viewholder.FormElementAudioRecorderViewHolder;
 import org.mlab.research.koios.ui.formmaster.viewholder.FormElementCommentMultiLineViewHolder;
 import org.mlab.research.koios.ui.formmaster.viewholder.FormElementHeader;
+import org.mlab.research.koios.ui.formmaster.viewholder.FormElementLikertScaleViewHolder;
 import org.mlab.research.koios.ui.formmaster.viewholder.FormElementPickerDateViewHolder;
 import org.mlab.research.koios.ui.formmaster.viewholder.FormElementPickerMultiViewHolder;
 import org.mlab.research.koios.ui.formmaster.viewholder.FormElementPickerSingleViewHolder;
@@ -230,6 +231,9 @@ public class FormAdapter extends RecyclerView.Adapter<BaseViewHolder> implements
             case BaseFormElement.TYPE_COMMENT_MULTILINE:
                 v = inflater.inflate(R.layout.form_element_comment, parent, false);
                 return new FormElementCommentMultiLineViewHolder(v, new FormItemEditTextListener(this));
+            case BaseFormElement.TYPE_LIKERT_SCALE:
+                v = inflater.inflate(R.layout.form_element, parent, false);
+                return new FormElementLikertScaleViewHolder(v, mContext, this);
             default:
                 v = inflater.inflate(R.layout.form_element, parent, false);
                 return new FormElementTextSingleLineViewHolder(v, new FormItemEditTextListener(this));

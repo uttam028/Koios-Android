@@ -68,6 +68,10 @@ public class SurveyOverviewAdapter extends RecyclerView.Adapter<SurveyOverviewHo
             lastResponseText = "Not Completed Yet";
             //the color scheme from first responder study
             holder.tvLastParticipation.setTextColor(ContextCompat.getColor(context, R.color.colorNdBlue));
+
+            if (!survey.getSchedule().startsWith("always")){
+                holder.tvLastParticipation.setTextColor(ContextCompat.getColor(context, R.color.colorError));
+            }
         }
 
         holder.tvLastParticipation.setText(lastResponseText);

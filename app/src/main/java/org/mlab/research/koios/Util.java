@@ -19,7 +19,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Locale;
+import java.util.Set;
 import java.util.TimeZone;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -66,11 +68,26 @@ public class Util {
         editor.apply();
     }
 
+    public static void saveDataToSharedPrefLast3Resp(String key, Set<String> value) {
+        //PreferenceManager.getDefaultSharedPreferences()
+        Context context = Koios.getContext();
+        SharedPreferences prefs = context.getSharedPreferences(context.getString(R.string.sharedPrefFileName), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putStringSet(key, value);
+        editor.apply();
+    }
+
     public static String getPreferenceData(String key) {
         Context context = Koios.getContext();
         SharedPreferences prefs = context.getSharedPreferences(context.getString(R.string.sharedPrefFileName), Context.MODE_PRIVATE);
         return prefs.getString(key, "");
 
+    }
+
+    public static Set<String> getPreferenceDataLast3Resp(String key) {
+        Context context = Koios.getContext();
+        SharedPreferences prefs = context.getSharedPreferences(context.getString(R.string.sharedPrefFileName), Context.MODE_PRIVATE);
+        return prefs.getStringSet(key, null);
     }
 
     public static String getUniqueDeviceId() {
@@ -338,6 +355,7 @@ public class Util {
         return -100;
     }
 
+
     public static boolean isValidDate(String givenDate){
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -351,23 +369,28 @@ public class Util {
 
     public static int handleSpecialCase(int surveyId){
         if (surveyId==22){
-            String followupKey = "survey-22-lastresponse";
-            String eventKey = "survey-23-lastresponse";
-            String lastResponseOfFollowUp = getPreferenceData(followupKey);
-            String lastResponseOfEvent = getPreferenceData(eventKey);
-            try {
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                Date eventDate = sdf.parse(lastResponseOfEvent);
-                Date followupDate = sdf.parse(lastResponseOfFollowUp);
+            String eventKey = "survey-23-last3responses";
+            Set<String> lastResponseOfEvent = getPreferenceDataLast3Resp(eventKey);
 
-                int differenceInDaysEventSurvey = getDayDifference(lastResponseOfEvent);
-                if (differenceInDaysEventSurvey > 0 && differenceInDaysEventSurvey < 3 && (eventDate.compareTo(followupDate))>=0){
-                    return R.color.colorError;
+            Log.d("test", "null");
+            if (lastResponseOfEvent != null) {
+                for (String time : lastResponseOfEvent) {
+                    Log.d("values_stored", "this " + time);
+                    try {
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+                        int differenceInDaysEventSurvey = getDayDifference(time);
+                        if (differenceInDaysEventSurvey > -1 && differenceInDaysEventSurvey < 3) {
+                            //return R.color.colorError;
+                            continue;
+                        }
+
+                    } catch (Exception e) {
+
+                    }
                 }
-
-            }catch (Exception e){
-
             }
+
         }
         return R.color.colorNdBlue;
     }
